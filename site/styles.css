@@ -382,6 +382,73 @@ tr.current td { color: #FFFFFF; font-weight: bold; }
   background: #65DBEF;
 }
 
+/* burger button — hidden on desktop; links wrapper is transparent to layout */
+.nav-burger { display: none; }
+
+.nav-links { display: contents; }
+
+@media (max-width: 640px) {
+  .site-nav { flex-direction: column; flex-wrap: nowrap; }
+
+  .nav-burger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 18px;
+    background: #000000;
+    border: 0;
+    cursor: pointer;
+    color: #8076F1;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .nav-burger .burger-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-burger .burger-bar {
+    display: block;
+    width: 20px;
+    height: 3px;
+    background: #8076F1;
+  }
+
+  .nav-burger:hover,
+  .nav-burger:focus {
+    color: #FFFFFF;
+    background: #5955E0;
+    outline: none;
+  }
+
+  .nav-burger:hover .burger-bar,
+  .nav-burger:focus .burger-bar { background: #FFFFFF; }
+
+  .nav-burger[aria-expanded="true"] { color: #65DBEF; }
+  .nav-burger[aria-expanded="true"] .burger-bar { background: #65DBEF; }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    border-top: 1px solid #5955E0;
+  }
+
+  .nav-links.open { display: flex; }
+
+  .site-nav a {
+    border-right: 0;
+    border-bottom: 1px solid #5955E0;
+  }
+
+  .site-nav a:last-child { border-bottom: 0; }
+}
+
 /* ---------- doc pages ---------- */
 
 .race-facts {

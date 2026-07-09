@@ -23,10 +23,20 @@
   </header>
 
   <nav class="site-nav" aria-label="Site">
-    <a href="index.html" aria-current="page">Dashboard</a>
-    <a href="plan.html">The Plan</a>
-    <a href="strength.html">Strength</a>
-    <a href="venues.html">Venues</a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+      <span class="burger-box" aria-hidden="true">
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+      </span>
+      MENU
+    </button>
+    <div id="nav-links" class="nav-links">
+      <a href="index.html" aria-current="page">Dashboard</a>
+      <a href="plan.html">The Plan</a>
+      <a href="strength.html">Strength</a>
+      <a href="venues.html">Venues</a>
+    </div>
   </nav>
 
   <main id="app">
@@ -104,6 +114,7 @@
     <p class="footer-brand">GTCB 102K &middot; 6,280m</p>
   </footer>
 
+  <script src="nav.js"></script>
   <script src="app.min.js"></script>
 </body>
 </html>
