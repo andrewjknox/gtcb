@@ -5,6 +5,9 @@
       { "matcher": "analyst-agent",  "hooks": [ { "type": "command", "command": "bash .claude/hooks/gate-b-summary.sh" } ] },
       { "matcher": "builder-agent",  "hooks": [ { "type": "command", "command": "bash .claude/hooks/gate-c-build.sh" } ] },
       { "matcher": "reviewer-agent", "hooks": [ { "type": "command", "command": "bash .claude/hooks/gate-d-review.sh" } ] }
+    ],
+    "SubagentStart": [
+      { "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/banner.sh" } ] }
     ]
   }
 }
