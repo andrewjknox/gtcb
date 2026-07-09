@@ -41,7 +41,7 @@ The only colors permitted in site/ styling:
 Static dashboard (HTML/JS/Canvas + JSON, no framework) tracking a 23-week ultra build to Gran Trail Costa Blanca 102K / 6,280m on Fri 2026-11-13. Weekly on-foot vertical gain vs plan is the primary metric.
 
 - Training W1 = Mon 2026-06-08 (= ISO 2026-W24); W23 = race week (Mon 2026-11-09).
-- Phases: Base W1–8, Build W9–16, Peak W17–20, Taper W21–22, Race W23.
+- Phases: Base W1–8, Build W9–16, Peak W17–19, Taper W20–22, Race W23.
 - All dates Europe/London; week = Mon 00:00 → Sun 23:59:59.
 - Data files are named by ISO week (`2026-W28.json`).
 - On-foot sport types: Run, TrailRun, VirtualRun, Walk, Hike.

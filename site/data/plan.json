@@ -22,7 +22,7 @@
     { "week": 17, "iso_week": "2026-W40", "start": "2026-09-28", "phase": "Peak",  "vert_target_m": 4000 },
     { "week": 18, "iso_week": "2026-W41", "start": "2026-10-05", "phase": "Peak",  "vert_target_m": 4200 },
     { "week": 19, "iso_week": "2026-W42", "start": "2026-10-12", "phase": "Peak",  "vert_target_m": 3000 },
-    { "week": 20, "iso_week": "2026-W43", "start": "2026-10-19", "phase": "Peak",  "vert_target_m": 1800, "notes": "recovery" },
+    { "week": 20, "iso_week": "2026-W43", "start": "2026-10-19", "phase": "Taper", "vert_target_m": 1800, "notes": "recovery" },
     { "week": 21, "iso_week": "2026-W44", "start": "2026-10-26", "phase": "Taper", "vert_target_m": 1200 },
     { "week": 22, "iso_week": "2026-W45", "start": "2026-11-02", "phase": "Taper", "vert_target_m": 700 },
     { "week": 23, "iso_week": "2026-W46", "start": "2026-11-09", "phase": "Race",  "vert_target_m": 500, "notes": "pre-race only; GTCB 102K Fri 2026-11-13" }
