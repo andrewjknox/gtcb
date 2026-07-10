@@ -117,27 +117,28 @@ function renderHero(cur) {
   badge.style.background = PHASE_COLORS[cur.phase] || C.gray;
 
   $("hero-actual").textContent = fmtInt(actual);
-  $("hero-prorated").textContent = fmtInt(prorated);
+  $("hero-prorated").textContent = fmtInt(target);
 
   const cls = statusClass(pctPro);
   $("hero-pct").innerHTML =
-    '<span class="' + cls + '">' + fmtInt(pctPro) + "% OF PRO-RATED TARGET</span>";
+    '<span class="' + cls + '">' + fmtInt(pctFull) + "% OF WEEK TARGET</span>";
 
-  // chunky segmented progress bar vs pro-rated target (20 segments = 5% each)
+  // chunky segmented progress bar vs full-week target (20 segments = 5% each),
+  // colour-coded by pace status (pro-rated)
   const bar = $("progress-bar");
   bar.innerHTML = "";
   bar.setAttribute("aria-label",
-    "Week-to-date vert " + fmtInt(actual) + " m, " + fmtInt(pctPro) + "% of pro-rated target");
-  const filled = Math.min(20, Math.round(Math.min(pctPro, 100) / 5));
+    "Week-to-date vert " + fmtInt(actual) + " m, " + fmtInt(pctFull) + "% of week target");
+  const filled = Math.min(20, Math.round(Math.min(pctFull, 100) / 5));
   for (let i = 0; i < 20; i++) {
     const seg = document.createElement("span");
-    seg.className = "seg" + (i < filled ? " fill-" + (pctPro > 100 ? "over" : cls) : "");
+    seg.className = "seg" + (i < filled ? " fill-" + (pctFull >= 100 ? "over" : cls) : "");
     bar.appendChild(seg);
   }
 
   $("hero-secondary").innerHTML =
-    "FULL-WEEK TARGET <strong>" + fmtInt(target) + "m</strong> · " +
-    fmtInt(pctFull) + "% DONE" +
+    "PACE TARGET <strong>" + fmtInt(prorated) + "m</strong> TO DATE · " +
+    fmtInt(pctPro) + "% OF PACE" +
     (pctPro > 100 ? " · AHEAD OF PACE ▲" : "");
 
   const tof = cur.time_on_feet || {};
