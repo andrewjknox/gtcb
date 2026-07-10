@@ -1,33 +1,122 @@
-/* GTCB shared nav — mobile burger toggle. Loaded by all pages. */
+/* GTCB shared nav — mobile burger toggle + metric/imperial unit toggle.
+   Loaded by all pages. Unit choice persists in localStorage ("gtcb-units"). */
 (function () {
   "use strict";
+
+  /* ---------- burger ---------- */
   var btn = document.querySelector(".nav-burger");
   var links = document.getElementById("nav-links");
-  if (!btn || !links) return;
 
-  function setOpen(open) {
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-    links.classList.toggle("open", open);
+  if (btn && links) {
+    var setOpen = function (open) {
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      links.classList.toggle("open", open);
+    };
+
+    btn.addEventListener("click", function () {
+      setOpen(btn.getAttribute("aria-expanded") !== "true");
+    });
+
+    // Close the menu once a destination is chosen.
+    links.addEventListener("click", function (e) {
+      var t = e.target;
+      while (t && t !== links) {
+        if (t.tagName === "A") { setOpen(false); return; }
+        t = t.parentNode;
+      }
+    });
+
+    // Escape closes the menu and returns focus to the button.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        btn.focus();
+      }
+    });
   }
 
-  btn.addEventListener("click", function () {
-    setOpen(btn.getAttribute("aria-expanded") !== "true");
-  });
+  /* ---------- units (metric <-> imperial) ---------- */
+  var UNITS_KEY = "gtcb-units";
 
-  // Close the menu once a destination is chosen.
-  links.addEventListener("click", function (e) {
-    var t = e.target;
-    while (t && t !== links) {
-      if (t.tagName === "A") { setOpen(false); return; }
-      t = t.parentNode;
+  var currentUnits = (function () {
+    try {
+      return localStorage.getItem(UNITS_KEY) === "imperial" ? "imperial" : "metric";
+    } catch (e) {
+      return "metric";
     }
-  });
+  })();
 
-  // Escape closes the menu and returns focus to the button.
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
-      setOpen(false);
-      btn.focus();
+  function getUnits() { return currentUnits; }
+
+  window.GTCBUnits = { get: getUnits };
+
+  var toggle = document.getElementById("unit-toggle");
+
+  /* Doc pages mark their <main> with data-units-convert; baked metric text
+     ("1,400 m", "~8–9 km", "30m") is rewritten in place. Originals are kept
+     so toggling back is lossless. The dashboard converts in app.js instead. */
+  var convertRoot = document.querySelector("[data-units-convert]");
+  var originals = null; // [{ node, text }]
+
+  var NUM = "\\d[\\d,]*(?:\\.\\d+)?";
+  // number, optional dash-joined second number, then a bare m/km unit
+  var UNIT_RE = new RegExp(
+    "(" + NUM + ")(?:(\\s*[\\u2013\\u2014-]\\s*)(" + NUM + "))?\\s?(km|m)\\b",
+    "g"
+  );
+
+  function parseNum(s) { return parseFloat(s.replace(/,/g, "")); }
+
+  function fmtFt(s) {
+    return Math.round(parseNum(s) * 3.28084).toLocaleString("en-GB");
+  }
+
+  function fmtMi(s) {
+    var mi = (parseNum(s) * 0.621371).toFixed(1);
+    return mi.slice(-2) === ".0" ? mi.slice(0, -2) : mi;
+  }
+
+  function toImperial(text) {
+    return text.replace(UNIT_RE, function (_all, a, sep, b, unit) {
+      var f = unit === "km" ? fmtMi : fmtFt;
+      return f(a) + (sep ? sep + f(b) : "") + " " + (unit === "km" ? "mi" : "ft");
+    });
+  }
+
+  function collectOriginals() {
+    originals = [];
+    var walker = document.createTreeWalker(convertRoot, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while ((n = walker.nextNode())) {
+      UNIT_RE.lastIndex = 0;
+      if (UNIT_RE.test(n.nodeValue)) originals.push({ node: n, text: n.nodeValue });
     }
-  });
+  }
+
+  function applyUnits() {
+    var imperial = getUnits() === "imperial";
+    if (toggle) {
+      toggle.textContent = imperial ? "UNITS: MI·FT" : "UNITS: KM·M";
+      toggle.setAttribute("aria-pressed", imperial ? "true" : "false");
+    }
+    if (convertRoot) {
+      if (originals === null) collectOriginals();
+      for (var i = 0; i < originals.length; i++) {
+        var o = originals[i];
+        o.node.nodeValue = imperial ? toImperial(o.text) : o.text;
+      }
+    }
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var next = currentUnits === "imperial" ? "metric" : "imperial";
+      currentUnits = next;
+      try { localStorage.setItem(UNITS_KEY, next); } catch (e) { /* in-memory only */ }
+      applyUnits();
+      window.dispatchEvent(new CustomEvent("gtcb:units", { detail: { units: next } }));
+    });
+  }
+
+  applyUnits();
 })();

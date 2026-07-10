@@ -382,6 +382,30 @@ tr.current td { color: #FFFFFF; font-weight: bold; }
   background: #65DBEF;
 }
 
+/* metric/imperial toggle — sits at the right end of the nav bar */
+.unit-toggle {
+  display: block;
+  margin-left: auto;
+  padding: 7px 18px;
+  background: #000000;
+  border: 0;
+  border-left: 1px solid #5955E0;
+  color: #74D07D;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.unit-toggle:hover,
+.unit-toggle:focus {
+  color: #000000;
+  background: #74D07D;
+  outline: none;
+}
+
 /* burger button — hidden on desktop; links wrapper is transparent to layout */
 .nav-burger { display: none; }
 
@@ -447,6 +471,14 @@ tr.current td { color: #FFFFFF; font-weight: bold; }
   }
 
   .site-nav a:last-child { border-bottom: 0; }
+
+  /* the last nav link's border-bottom already separates it from the toggle */
+  .unit-toggle {
+    margin-left: 0;
+    width: 100%;
+    text-align: left;
+    border-left: 0;
+  }
 }
 
 /* ---------- doc pages ---------- */

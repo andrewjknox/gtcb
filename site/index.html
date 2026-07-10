@@ -36,6 +36,7 @@
       <a href="plan.html">The Plan</a>
       <a href="strength.html">Strength</a>
       <a href="venues.html">Venues</a>
+      <button id="unit-toggle" class="unit-toggle" type="button" aria-pressed="false" aria-label="Switch between metric and imperial units">UNITS: KM&middot;M</button>
     </div>
   </nav>
 
@@ -51,8 +52,8 @@
         <div class="hero-main">
           <div class="hero-vert">
             <span id="hero-actual" class="big-num">0</span>
-            <span class="big-unit">m</span>
-            <span class="hero-vs">/ <span id="hero-prorated">0</span>m THIS WEEK</span>
+            <span id="hero-unit" class="big-unit">m</span>
+            <span class="hero-vs">/ <span id="hero-prorated">0</span><span id="hero-vs-unit">m</span> THIS WEEK</span>
           </div>
           <div id="hero-pct" class="hero-pct"></div>
           <div id="progress-bar" class="progress-bar" role="img"></div>
@@ -80,7 +81,7 @@
         <div class="table-scroll">
           <table id="build-table">
             <thead>
-              <tr><th scope="col">WK</th><th scope="col">ISO</th><th scope="col">PHASE</th><th scope="col">TARGET m</th><th scope="col">ACTUAL m</th><th scope="col">%</th></tr>
+              <tr><th scope="col">WK</th><th scope="col">ISO</th><th scope="col">PHASE</th><th scope="col" id="th-target">TARGET m</th><th scope="col" id="th-actual">ACTUAL m</th><th scope="col">%</th></tr>
             </thead>
             <tbody></tbody>
           </table>

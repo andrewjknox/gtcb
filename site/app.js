@@ -41,7 +41,18 @@ const FONT_BOLD = 'bold 11px "Consolas", "Courier New", Courier, monospace';
 const $ = (id) => document.getElementById(id);
 const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
 const fmtInt = (v) => Math.round(num(v)).toLocaleString("en-GB");
-const fmtKm = (m) => (num(m) / 1000).toFixed(1);
+
+/* ---------- units (nav.js owns the toggle + persistence) ---------- */
+const M_PER_FT = 0.3048;
+const M_PER_MI = 1609.344;
+const isImperial = () => window.GTCBUnits && window.GTCBUnits.get() === "imperial";
+/* vertical: metres or feet */
+const vertVal = (m) => (isImperial() ? num(m) / M_PER_FT : num(m));
+const fmtVert = (m) => fmtInt(vertVal(m));
+const vertUnit = () => (isImperial() ? "ft" : "m");
+/* distance: km or miles */
+const fmtDist = (m) => (num(m) / (isImperial() ? M_PER_MI : 1000)).toFixed(1);
+const distUnit = () => (isImperial() ? "mi" : "km");
 
 function fmtHM(totalS) {
   const s = Math.max(0, Math.round(num(totalS)));
@@ -116,8 +127,10 @@ function renderHero(cur) {
   badge.textContent = cur.phase || "?";
   badge.style.background = PHASE_COLORS[cur.phase] || C.gray;
 
-  $("hero-actual").textContent = fmtInt(actual);
-  $("hero-prorated").textContent = fmtInt(target);
+  $("hero-actual").textContent = fmtVert(actual);
+  $("hero-prorated").textContent = fmtVert(target);
+  $("hero-unit").textContent = vertUnit();
+  $("hero-vs-unit").textContent = vertUnit();
 
   const cls = statusClass(pctPro);
   $("hero-pct").innerHTML =
@@ -128,7 +141,7 @@ function renderHero(cur) {
   const bar = $("progress-bar");
   bar.innerHTML = "";
   bar.setAttribute("aria-label",
-    "Week-to-date vert " + fmtInt(actual) + " m, " + fmtInt(pctFull) + "% of week target");
+    "Week-to-date vert " + fmtVert(actual) + " " + vertUnit() + ", " + fmtInt(pctFull) + "% of week target");
   const filled = Math.min(20, Math.round(Math.min(pctFull, 100) / 5));
   for (let i = 0; i < 20; i++) {
     const seg = document.createElement("span");
@@ -139,14 +152,14 @@ function renderHero(cur) {
   const remaining = Math.max(0, target - actual);
   const daysLeft = Math.max(0, 7 - num(cur.days_elapsed));
   $("hero-secondary").innerHTML = remaining > 0
-    ? "<strong>" + fmtInt(remaining) + "m</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
-    : "TARGET HIT ▲ · <strong>+" + fmtInt(actual - target) + "m</strong> OVER";
+    ? "<strong>" + fmtVert(remaining) + vertUnit() + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
+    : "TARGET HIT ▲ · <strong>+" + fmtVert(actual - target) + vertUnit() + "</strong> OVER";
 
   const tof = cur.time_on_feet || {};
   const dist = cur.distance || {};
   const sess = cur.sessions || {};
   $("stat-time").innerHTML = fmtHM(tof.actual_s) + " <small>h:mm</small>";
-  $("stat-dist").innerHTML = fmtKm(dist.actual_m) + " <small>km</small>";
+  $("stat-dist").innerHTML = fmtDist(dist.actual_m) + " <small>" + distUnit() + "</small>";
   $("stat-sessions").innerHTML =
     num(sess.on_foot_count) + "/" + num(sess.count) + " <small>on foot</small>";
   $("stat-days").innerHTML = num(cur.days_elapsed) + " <small>of 7</small>";
@@ -158,11 +171,15 @@ function renderHero(cur) {
 const tooltip = { el: null };
 
 function attachTooltip(canvas, hitRegions) {
+  // hit regions are swapped on every redraw (resize, unit toggle); listeners bind once
+  canvas._hits = hitRegions;
+  if (canvas._tooltipBound) return;
+  canvas._tooltipBound = true;
   const show = (evt) => {
     const rect = canvas.getBoundingClientRect();
     const x = ((evt.clientX - rect.left) / rect.width) * canvas.width;
     const y = ((evt.clientY - rect.top) / rect.height) * canvas.height;
-    const hit = hitRegions.find(
+    const hit = canvas._hits.find(
       (r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h
     );
     if (hit) {
@@ -201,22 +218,24 @@ function drawBuildChart(state) {
   const plotW = W - mL - mR;
   const plotH = H - mT - mB;
 
+  // axis works in display units (m or ft) so gridlines land on round numbers
+  const gridStep = isImperial() ? 2000 : 500;
   let maxY = 0;
   for (const wk of weeks) {
-    maxY = Math.max(maxY, num(wk.vert_target_m));
+    maxY = Math.max(maxY, vertVal(wk.vert_target_m));
     const s = state.byIso[wk.iso_week];
-    if (s && s.vert) maxY = Math.max(maxY, num(s.vert.actual_m));
+    if (s && s.vert) maxY = Math.max(maxY, vertVal(s.vert.actual_m));
   }
-  maxY = Math.max(500, Math.ceil(maxY / 500) * 500);
+  maxY = Math.max(gridStep, Math.ceil(maxY / gridStep) * gridStep);
   const yOf = (v) => mT + plotH - (num(v) / maxY) * plotH;
 
   ctx.fillStyle = C.black;
   ctx.fillRect(0, 0, W, H);
 
-  // gridlines every 500 m
+  // gridlines every 500 m / 2000 ft
   ctx.font = FONT;
   ctx.textBaseline = "middle";
-  for (let v = 0; v <= maxY; v += 500) {
+  for (let v = 0; v <= maxY; v += gridStep) {
     const y = Math.round(yOf(v)) + 0.5;
     ctx.strokeStyle = C.dkBlue;
     ctx.globalAlpha = v === 0 ? 1 : 0.4;
@@ -246,19 +265,19 @@ function drawBuildChart(state) {
     // actual: solid phase-colored fill
     if (actual !== null && actual > 0) {
       ctx.fillStyle = color;
-      const yA = yOf(actual);
+      const yA = yOf(vertVal(actual));
       ctx.fillRect(Math.round(x), Math.round(yA), barW, Math.round(yOf(0) - yA));
     }
 
     // target: hollow outline drawn on top so it stays visible when exceeded
     ctx.strokeStyle = isCur ? C.white : C.gray;
     ctx.lineWidth = 1;
-    const yT = Math.round(yOf(target)) + 0.5;
+    const yT = Math.round(yOf(vertVal(target))) + 0.5;
     ctx.strokeRect(Math.round(x) + 0.5, yT, barW - 1, Math.round(yOf(0)) - yT);
 
     // current week: pro-rated pace tick in cyan + white marker above
     if (isCur && s && s.vert) {
-      const yP = Math.round(yOf(num(s.vert.prorated_target_m))) + 0.5;
+      const yP = Math.round(yOf(vertVal(s.vert.prorated_target_m))) + 0.5;
       ctx.strokeStyle = C.cyan;
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -269,7 +288,7 @@ function drawBuildChart(state) {
       ctx.fillStyle = C.white;
       ctx.textAlign = "center";
       ctx.font = FONT_BOLD;
-      ctx.fillText("▼", x + barW / 2, Math.min(yOf(target), yOf(actual)) - 10);
+      ctx.fillText("▼", x + barW / 2, Math.min(yOf(vertVal(target)), yOf(vertVal(actual))) - 10);
       ctx.font = FONT;
     }
 
@@ -283,10 +302,10 @@ function drawBuildChart(state) {
     let text = "W" + wk.week + " · " + wk.phase.toUpperCase() + " · " + wk.iso_week;
     if (actual !== null) {
       const pct = s.vert ? num(s.vert.pct_of_target) : 0;
-      text += "\nVERT " + fmtInt(actual) + " / " + fmtInt(target) + " m (" + pct + "%)";
-      if (isCur) text += "\nIN PROGRESS · PACE LINE " + fmtInt(s.vert.prorated_target_m) + " m";
+      text += "\nVERT " + fmtVert(actual) + " / " + fmtVert(target) + " " + vertUnit() + " (" + pct + "%)";
+      if (isCur) text += "\nIN PROGRESS · PACE LINE " + fmtVert(s.vert.prorated_target_m) + " " + vertUnit();
     } else {
-      text += "\nTARGET " + fmtInt(target) + " m · NO DATA YET";
+      text += "\nTARGET " + fmtVert(target) + " " + vertUnit() + " · NO DATA YET";
     }
     if (wk.notes) text += "\n[" + wk.notes.toUpperCase() + "]";
     hits.push({ x: mL + i * slotW, y: mT, w: slotW, h: plotH, text });
@@ -335,19 +354,21 @@ function renderLegend(plan) {
 }
 
 function renderBuildTable(state) {
+  $("th-target").textContent = "TARGET " + vertUnit();
+  $("th-actual").textContent = "ACTUAL " + vertUnit();
   const tbody = $("build-table").querySelector("tbody");
   tbody.innerHTML = "";
   for (const wk of state.plan.weeks) {
     const s = state.byIso[wk.iso_week];
     const tr = document.createElement("tr");
     if (wk.week === num(state.current.training_week)) tr.className = "current";
-    const actual = s && s.vert ? fmtInt(s.vert.actual_m) : "—";
+    const actual = s && s.vert ? fmtVert(s.vert.actual_m) : "—";
     const pct = s && s.vert ? fmtInt(s.vert.pct_of_target) + "%" : "—";
     tr.innerHTML =
       "<td>" + wk.week + "</td>" +
       '<td class="left">' + wk.iso_week + "</td>" +
       '<td class="left">' + wk.phase + "</td>" +
-      "<td>" + fmtInt(wk.vert_target_m) + "</td>" +
+      "<td>" + fmtVert(wk.vert_target_m) + "</td>" +
       "<td>" + actual + "</td>" +
       "<td>" + pct + "</td>";
     tbody.appendChild(tr);
@@ -374,8 +395,8 @@ function drawDailyChart(state) {
   const slotW = (W - mL - mR) / 7;
   const barW = Math.max(6, Math.floor(slotW * 0.55));
 
-  let maxY = 100;
-  for (const d of days) maxY = Math.max(maxY, num(d.vert_m));
+  let maxY = isImperial() ? 330 : 100; // same floor ≈100 m either way
+  for (const d of days) maxY = Math.max(maxY, vertVal(d.vert_m));
   maxY = Math.ceil(maxY / 100) * 100;
   const yOf = (v) => mT + plotH - (num(v) / maxY) * plotH;
 
@@ -399,12 +420,12 @@ function drawDailyChart(state) {
 
     if (v > 0) {
       ctx.fillStyle = color;
-      const yV = yOf(v);
+      const yV = yOf(vertVal(v));
       ctx.fillRect(Math.round(x), Math.round(yV), barW, Math.round(yOf(0) - yV));
       ctx.fillStyle = C.white;
       ctx.textAlign = "center";
       ctx.font = FONT_BOLD;
-      ctx.fillText(fmtInt(v), x + barW / 2, yV - 9);
+      ctx.fillText(fmtVert(v), x + barW / 2, yV - 9);
       ctx.font = FONT;
     } else if (isFuture) {
       // future day: hollow gray placeholder block on the baseline
@@ -427,8 +448,8 @@ function drawDailyChart(state) {
     if (isFuture) text += "\nUPCOMING";
     else if (v <= 0 && num(d.time_s) <= 0) text += "\nREST DAY";
     else {
-      text += "\nVERT " + fmtInt(v) + " m";
-      text += "\n" + fmtHM(d.time_s) + " h:mm · " + fmtKm(d.distance_m) + " km";
+      text += "\nVERT " + fmtVert(v) + " " + vertUnit();
+      text += "\n" + fmtHM(d.time_s) + " h:mm · " + fmtDist(d.distance_m) + " " + distUnit();
     }
     hits.push({ x: mL + i * slotW, y: mT, w: slotW, h: plotH + 4, text });
   }
@@ -537,6 +558,14 @@ async function main() {
       drawBuildChart(state);
       drawDailyChart(state);
     }, 120);
+  });
+
+  // nav.js unit toggle — re-render everything that shows a number
+  window.addEventListener("gtcb:units", () => {
+    renderHero(state.current);
+    drawBuildChart(state);
+    renderBuildTable(state);
+    drawDailyChart(state);
   });
 }
 
