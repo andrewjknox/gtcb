@@ -74,7 +74,7 @@ async function fetchJSON(url) {
   return res.json();
 }
 
-async function loadAll() {
+async function loadAllFetch() {
   const [plan, index] = await Promise.all([
     fetchJSON("./data/plan.json"),
     fetchJSON("./data/summary/index.json")
@@ -86,6 +86,26 @@ async function loadAll() {
   const byIso = {};
   for (const s of summaries) byIso[s.iso_week] = s;
   return { plan, weekIds, byIso };
+}
+
+/* inline copy baked into ./data.js by the build — same shape as the fetch path */
+function loadAllInline() {
+  const d = window.GTCB_DATA;
+  const weekIds = Array.isArray(d.index.weeks) ? d.index.weeks.slice().sort() : [];
+  return { plan: d.plan, weekIds, byIso: d.summaries || {} };
+}
+
+async function loadAll() {
+  const hasInline = typeof window.GTCB_DATA === "object" && window.GTCB_DATA !== null;
+  /* file://: relative fetch fails, go straight to inline. Hosted: fetch first
+     so fresh JSON always wins; inline is only a fallback. */
+  if (location.protocol === "file:" && hasInline) return loadAllInline();
+  try {
+    return await loadAllFetch();
+  } catch (err) {
+    if (hasInline) return loadAllInline();
+    throw err;
+  }
 }
 
 /* ---------- countdown ---------- */
