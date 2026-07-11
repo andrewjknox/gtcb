@@ -910,6 +910,38 @@ tr.current-week td:first-child {
 .notation-table th, .notation-table td,
 .phase-map-table th, .phase-map-table td { text-align: left; }
 
+/* regs page */
+
+.cutoff-table { min-width: 620px; }
+
+.cutoff-table th,
+.cutoff-table td { text-align: left; }
+
+.cutoff-table th.num,
+.cutoff-table td.num { text-align: right; white-space: nowrap; }
+
+.cutoff-table tr.hard td { color: #FFFFFF; }
+
+.kit-table { min-width: 560px; }
+
+.kit-table th,
+.kit-table td { text-align: left; }
+
+.price-table { min-width: 480px; }
+
+.price-table th,
+.price-table td { text-align: left; }
+
+.price-table th.num,
+.price-table td.num { text-align: right; white-space: nowrap; }
+
+.tag-minor { background: #CCC35E; }
+.tag-serious { background: #DB6559; }
+.tag-dsq { background: #B95E51; color: #FFFFFF; }
+.tag-crew { background: #3EB849; }
+.tag-bag { background: #B766B5; }
+.tag-evac { background: #65DBEF; }
+
 /* under construction (stub pages) */
 
 .under-construction {
