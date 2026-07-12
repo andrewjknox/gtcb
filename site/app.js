@@ -236,8 +236,8 @@ function renderHero(state) {
 
     const remainS = targetS - tofActualS;
     $("hero-secondary").innerHTML = remainS > 0
-      ? "<strong>" + fmtHM(remainS) + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
-      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtHM(tofActualS - targetS) + "</strong> OVER";
+      ? "<strong>" + fmtHM(remainS) + " h:mm</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
+      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtHM(tofActualS - targetS) + " h:mm</strong> OVER";
   } else {
     const actual = num(vert.actual_m);
     const target = num(vert.target_m);
