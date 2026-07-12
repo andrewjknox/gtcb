@@ -236,8 +236,8 @@ function renderHero(state) {
 
     const remainS = targetS - tofActualS;
     $("hero-secondary").innerHTML = remainS > 0
-      ? "<strong>" + fmtHM(remainS) + " h:mm</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
-      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtHM(tofActualS - targetS) + " h:mm</strong> OVER";
+      ? '<strong class="' + cls + '">' + fmtHM(remainS) + " h:mm</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
+      : "W" + num(cur.training_week) + ' TARGET HIT ▲ · <strong class="ok">+' + fmtHM(tofActualS - targetS) + " h:mm</strong> OVER";
   } else {
     const actual = num(vert.actual_m);
     const target = num(vert.target_m);
@@ -261,8 +261,8 @@ function renderHero(state) {
 
     const remaining = Math.max(0, target - actual);
     $("hero-secondary").innerHTML = remaining > 0
-      ? "<strong>" + fmtVert(remaining) + " " + vertUnit() + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
-      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtVert(actual - target) + " " + vertUnit() + "</strong> OVER";
+      ? '<strong class="' + cls + '">' + fmtVert(remaining) + " " + vertUnit() + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
+      : "W" + num(cur.training_week) + ' TARGET HIT ▲ · <strong class="ok">+' + fmtVert(actual - target) + " " + vertUnit() + "</strong> OVER";
   }
 
   /* stats row — the first stat swaps with the big number per mode */
