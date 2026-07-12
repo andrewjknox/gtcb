@@ -261,8 +261,8 @@ function renderHero(state) {
 
     const remaining = Math.max(0, target - actual);
     $("hero-secondary").innerHTML = remaining > 0
-      ? "<strong>" + fmtVert(remaining) + vertUnit() + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
-      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtVert(actual - target) + vertUnit() + "</strong> OVER";
+      ? "<strong>" + fmtVert(remaining) + " " + vertUnit() + "</strong> TO GO · " + daysLeft + (daysLeft === 1 ? " DAY" : " DAYS") + " LEFT"
+      : "W" + num(cur.training_week) + " TARGET HIT ▲ · <strong>+" + fmtVert(actual - target) + " " + vertUnit() + "</strong> OVER";
   }
 
   /* stats row — the first stat swaps with the big number per mode */
