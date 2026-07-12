@@ -76,13 +76,16 @@ function setMetric(m) {
   try { localStorage.setItem(METRIC_KEY, m); } catch (e) { /* in-memory only */ }
 }
 
-/* ToF target: plan.json's tof_target_h is either a bare number of hours or a
-   legacy [min,max] range (THE target is the upper bound). Normalize to a
-   single number, or null when absent/invalid (e.g. race week). */
+/* ToF target: plan.json's tof_target_h may be a bare number of hours (7), a
+   single-element array ([7] — the owner's current shape), or a legacy
+   [min,max] range — THE target is the last/upper value. Normalize to a single
+   number, or null when absent/invalid (e.g. race week, empty array). */
 function tofTargetH(wk) {
   const raw = wk ? wk.tof_target_h : undefined;
   if (raw === null || raw === undefined) return null;
-  const v = Array.isArray(raw) ? Number(raw[1]) : Number(raw);
+  const v = Array.isArray(raw)
+    ? (raw.length > 0 ? Number(raw[raw.length - 1]) : NaN)
+    : Number(raw);
   return Number.isFinite(v) ? v : null;
 }
 
