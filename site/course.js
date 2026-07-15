@@ -99,6 +99,129 @@
     return (km - track[lo][0] < track[hi][0] - km) ? lo : hi;
   }
 
+  /* ---------- pace / cut-off planner model ---------- */
+  /* Cumulative Naismith/Langmuir "effort" (km-equivalents) along the track,
+     then anchored through the official hard cut-offs so a 24 h finish
+     reproduces the organiser's schedule exactly; any other finish time just
+     scales the same normalised curve. */
+
+  var planTargetH = 22;   // chosen finish time, hours (16–24)
+  var planRaceMin = 0;    // race-clock elapsed minutes from Fri 23:00
+  var chartAPI = null;    // { setYou } — rebound on every renderChart
+
+  var cumEff = [0];
+  (function () {
+    var e = 0;
+    for (var i = 1; i < track.length; i++) {
+      var dkm = track[i][0] - track[i - 1][0];
+      var dele = track[i][1] - track[i - 1][1];
+      e += dkm;                                  // flat distance (km)
+      if (dele > 0) {
+        e += dele / 120;                         // Naismith: 600 m climb = 5 km flat
+      } else {
+        var desc = -dele;
+        var grade = dkm > 0 ? desc / (dkm * 1000) : 0;
+        if (grade > 0.20) e += desc / 400;       // steep-descent penalty (> ~20%)
+      }
+      cumEff[i] = e;
+    }
+  })();
+  var totalEff = cumEff[cumEff.length - 1];
+
+  /* interpolate along the track: col 0 = cumulative effort, col 1 = elevation */
+  function interpTrack(km, col) {
+    if (km <= track[0][0]) return col ? track[0][1] : 0;
+    if (km >= maxKm) return col ? track[track.length - 1][1] : totalEff;
+    var lo = 0, hi = track.length - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (track[mid][0] < km) lo = mid; else hi = mid; }
+    var span = track[hi][0] - track[lo][0];
+    var t = span > 0 ? (km - track[lo][0]) / span : 0;
+    if (col) return track[lo][1] + t * (track[hi][1] - track[lo][1]);
+    return cumEff[lo] + t * (cumEff[hi] - cumEff[lo]);
+  }
+  function effortAtKm(km) { return interpTrack(km, 0); }
+  function eleAtKm(km) { return interpTrack(km, 1); }
+
+  function kmAtEffort(e) {
+    if (e <= 0) return track[0][0];
+    if (e >= totalEff) return maxKm;
+    var lo = 0, hi = cumEff.length - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (cumEff[mid] < e) lo = mid; else hi = mid; }
+    var span = cumEff[hi] - cumEff[lo];
+    var t = span > 0 ? (e - cumEff[lo]) / span : 0;
+    return track[lo][0] + t * (track[hi][0] - track[lo][0]);
+  }
+
+  var LIMIT_MIN = (C.official && C.official.limit_h ? C.official.limit_h : 24) * 60;
+  /* "HH:MM DAY" -> elapsed minutes from the Fri 23:00 start */
+  function closesToMin(str) {
+    var mtch = /(\d{1,2}):(\d{2})\s*(FRI|SAT|SUN)/.exec(str || "");
+    if (!mtch) return null;
+    var abs = (mtch[3] === "SUN" ? 2880 : mtch[3] === "SAT" ? 1440 : 0) + (+mtch[1]) * 60 + (+mtch[2]);
+    return abs - 1380; // Fri 23:00 sits 1380 min into Friday
+  }
+
+  /* hard controls are the anchors: frac = closes / 24 h, rawEff = effort at km */
+  var anchors = [];
+  (function () {
+    for (var i = 0; i < C.stations.length; i++) {
+      var st = C.stations[i];
+      if (!st.hard || !st.closes) continue;
+      var cm = closesToMin(st.closes);
+      if (cm === null) continue;
+      anchors.push({ km: st.x_km, rawEff: effortAtKm(st.x_km), frac: cm / LIMIT_MIN });
+    }
+  })();
+
+  /* normalised effort-fraction at a km: piecewise-linear rescale of the raw
+     effort curve so each hard-control km lands exactly on its official frac */
+  function fracAtKm(km) {
+    var re = effortAtKm(km);
+    if (re <= anchors[0].rawEff) return anchors[0].frac;
+    for (var i = 1; i < anchors.length; i++) {
+      if (re <= anchors[i].rawEff) {
+        var a = anchors[i - 1], b = anchors[i], sp = b.rawEff - a.rawEff;
+        return a.frac + (sp > 0 ? (re - a.rawEff) / sp : 0) * (b.frac - a.frac);
+      }
+    }
+    return anchors[anchors.length - 1].frac;
+  }
+  /* invert: km for a normalised effort fraction (drives the "you are here" mark) */
+  function kmAtFrac(f) {
+    f = Math.max(0, Math.min(1, f));
+    var i = 1;
+    while (i < anchors.length && f > anchors[i].frac) i++;
+    if (i >= anchors.length) return maxKm;
+    var a = anchors[i - 1], b = anchors[i], sp = b.frac - a.frac;
+    var eff = a.rawEff + (sp > 0 ? (f - a.frac) / sp : 0) * (b.rawEff - a.rawEff);
+    return kmAtEffort(eff);
+  }
+  function pad2(n) { n = Math.round(n); return (n < 10 ? "0" : "") + n; }
+  /* elapsed minutes from Fri 23:00 -> "HH:MM DAY" clock time */
+  function fmtClock(elapsedMin) {
+    var abs = 1380 + Math.round(elapsedMin);
+    var day = Math.floor(abs / 1440);
+    var mday = ((abs % 1440) + 1440) % 1440;
+    var lbl = day <= 0 ? "FRI" : day === 1 ? "SAT" : "SUN";
+    return pad2(Math.floor(mday / 60)) + ":" + pad2(mday % 60) + " " + lbl;
+  }
+  function fmtDur(h) {
+    var H = Math.floor(h + 1e-9), M = Math.round((h - H) * 60);
+    if (M === 60) { H++; M = 0; }
+    return H + ":" + pad2(M);
+  }
+  function fmtBuf(min) {
+    var s = min < -0.5 ? "−" : "+", a = Math.abs(Math.round(min));
+    if (a >= 60) return s + Math.floor(a / 60) + "h" + pad2(a % 60);
+    return s + a + "m";
+  }
+  function bufClass(min) {
+    if (min < 0) return "buf-neg";
+    if (min < 15) return "buf-bad";
+    if (min < 60) return "buf-tight";
+    return "buf-ok";
+  }
+
   function gradientAt(idx) {
     var km = track[idx][0];
     var a = idx, b = idx;
@@ -116,6 +239,14 @@
     ];
     if (s.aid) lines.push({ text: "Aid: " + (s.aid === "LS" ? "liquid + solid" : "liquid only") });
     if (s.closes) lines.push({ text: "Closes " + s.closes });
+    /* pace-planner arrival at the chosen finish time */
+    var frac = fracAtKm(s.x_km);
+    var arr = s.n === "S" ? "23:00 FRI" : fmtClock(frac * planTargetH * 60);
+    lines.push({ text: "Arrive ~" + arr + " (" + fmtDur(planTargetH) + " pace)" });
+    if (s.hard && s.closes && s.n !== "S") {
+      var buf = closesToMin(s.closes) - frac * planTargetH * 60;
+      lines.push({ text: "Buffer " + fmtBuf(buf) });
+    }
     var sup = [];
     if (s.crew) sup.push("crew");
     if (s.bag) sup.push("drop-bag");
@@ -294,6 +425,33 @@
         hit.addEventListener("blur", tipHide);
       })(C.stations[i]);
     }
+
+    /* ---------- you-are-here marker (pace planner) ---------- */
+    var youG = el("g", { visibility: "hidden", "aria-hidden": "true" }, svg);
+    var youLine = el("line", { stroke: "#DED087", "stroke-width": "1.5", "stroke-dasharray": "4 3", "stroke-opacity": "0.9" }, youG);
+    var youBg = el("rect", { fill: SURFACE, stroke: "#DED087", "stroke-width": "1" }, youG);
+    var youTxt = el("text", { class: "you-label", "text-anchor": "middle" }, youG);
+    var youDot = el("circle", { r: narrow ? 4.5 : 5.5, fill: "#DED087", stroke: SURFACE, "stroke-width": "2" }, youG);
+
+    chartAPI = {
+      setYou: function (km) {
+        var ele = eleAtKm(km);
+        var xx = X(km), yy = Y(Math.max(Y_MIN, Math.min(Y_MAX, ele)));
+        var topY = m.top + 11;
+        youLine.setAttribute("x1", xx); youLine.setAttribute("x2", xx);
+        youLine.setAttribute("y1", topY + 3); youLine.setAttribute("y2", yy - 5);
+        youDot.setAttribute("cx", xx); youDot.setAttribute("cy", yy);
+        var label = fmtDist(km) + " · " + fmtEle(ele);
+        youTxt.textContent = label;
+        var w = label.length * 6.4 + 12, hh = 15;
+        var lx = Math.max(m.left + w / 2, Math.min(xx, m.left + pw - w / 2));
+        youTxt.setAttribute("x", lx); youTxt.setAttribute("y", topY);
+        youBg.setAttribute("x", lx - w / 2); youBg.setAttribute("y", topY - 11);
+        youBg.setAttribute("width", w); youBg.setAttribute("height", hh);
+        youG.setAttribute("visibility", "visible");
+      }
+    };
+    updateYou();
   }
 
   /* ---------- rutometro table (same data as the chart) ---------- */
@@ -355,9 +513,114 @@
     tableHost.appendChild(tbody);
   }
 
+  /* ---------- pace planner UI ---------- */
+
+  var targetSlider = document.getElementById("target-slider");
+  var raceSlider = document.getElementById("raceclock-slider");
+  var targetOut = document.getElementById("target-readout");
+  var raceOut = document.getElementById("raceclock-readout");
+  var plannerHost = document.getElementById("planner-table");
+  var cutoffBtn = document.getElementById("cutoff-preset");
+
+  function updateYou() {
+    if (!chartAPI) return;
+    var frac = planTargetH > 0 ? (planRaceMin / 60) / planTargetH : 0;
+    chartAPI.setYou(kmAtFrac(frac));
+  }
+
+  function outSpan(parent, cls, text) {
+    var s = document.createElement("span");
+    if (cls) s.className = cls;
+    s.textContent = text;
+    parent.appendChild(s);
+  }
+
+  function renderReadouts() {
+    if (targetOut) {
+      targetOut.textContent = "";
+      outSpan(targetOut, null, "TARGET " + fmtDur(planTargetH) + " ");
+      outSpan(targetOut, "finish", "→ FINISH " + fmtClock(planTargetH * 60));
+    }
+    if (raceOut) {
+      raceOut.textContent = "";
+      var frac = planTargetH > 0 ? (planRaceMin / 60) / planTargetH : 0;
+      var pinned = planRaceMin > planTargetH * 60 + 1e-6;
+      outSpan(raceOut, null, fmtClock(planRaceMin) + " ");
+      outSpan(raceOut, "finish", "@ " + fmtDist(kmAtFrac(frac)) + (pinned ? " (FIN)" : ""));
+    }
+  }
+
+  function renderPlannerTable() {
+    if (!plannerHost) return;
+    plannerHost.textContent = "";
+    var head = ["CTRL", "STATION", "DIST", "ARRIVAL", "CLOSES", "BUFFER"];
+    var thead = document.createElement("thead");
+    var hr = document.createElement("tr");
+    for (var i = 0; i < head.length; i++) {
+      var th = document.createElement("th");
+      th.scope = "col";
+      th.textContent = head[i];
+      th.className = i >= 2 ? "num" : "left";
+      hr.appendChild(th);
+    }
+    thead.appendChild(hr);
+    plannerHost.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+    for (i = 0; i < C.stations.length; i++) {
+      var s = C.stations[i];
+      var frac = fracAtKm(s.x_km);
+      var tr = document.createElement("tr");
+      var isCut = s.hard && s.closes && s.n !== "S";
+      if (s.hard && s.closes) tr.className = "hard";
+      td(tr, s.n, "left");
+      td(tr, s.name, "left");
+      td(tr, fmtDist(s.km), "num");
+      td(tr, s.n === "S" ? "23:00 FRI" : fmtClock(frac * planTargetH * 60), "num");
+      if (isCut) {
+        var closeMin = closesToMin(s.closes);
+        var buf = closeMin - frac * planTargetH * 60;
+        td(tr, fmtClock(closeMin), "num");
+        td(tr, fmtBuf(buf), "num " + bufClass(buf));
+      } else {
+        td(tr, "—", "num");
+        td(tr, "—", "num");
+      }
+      tbody.appendChild(tr);
+    }
+    plannerHost.appendChild(tbody);
+  }
+
+  function renderPlanner() { renderReadouts(); renderPlannerTable(); }
+
+  if (targetSlider) {
+    planTargetH = parseFloat(targetSlider.value) || planTargetH;
+    targetSlider.addEventListener("input", function () {
+      planTargetH = parseFloat(targetSlider.value);
+      renderPlanner();
+      updateYou();
+    });
+  }
+  if (raceSlider) {
+    planRaceMin = parseFloat(raceSlider.value) || planRaceMin;
+    raceSlider.addEventListener("input", function () {
+      planRaceMin = parseFloat(raceSlider.value);
+      renderReadouts();
+      updateYou();
+    });
+  }
+  if (cutoffBtn && targetSlider) {
+    cutoffBtn.addEventListener("click", function () {
+      targetSlider.value = "24";
+      planTargetH = 24;
+      renderPlanner();
+      updateYou();
+    });
+  }
+
   /* ---------- wire up ---------- */
 
-  function renderAll() { renderChart(); renderTable(); }
+  function renderAll() { renderChart(); renderTable(); renderPlanner(); }
 
   var raf = null;
   window.addEventListener("resize", function () {
