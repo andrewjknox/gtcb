@@ -425,6 +425,7 @@
        a red circle never occurs. The start carries no marker. */
     var mk = el("g", {}, svg);
     var R = narrow ? 4 : 5;
+    var labelRefreshers = []; // aria-labels bake in the target pace — re-run on planner change
     for (i = 0; i < C.stations.length; i++) {
       (function (s) {
         if (s.n === "S") return;
@@ -436,8 +437,11 @@
         }
         /* oversized invisible hit target, keyboard-reachable */
         var hit = el("circle", { cx: sx, cy: sy, r: 14, fill: SURFACE, "fill-opacity": "0", tabindex: "0", role: "img", class: "station-hit" }, mk);
-        var label = stationLines(s).map(function (l) { return l.text; }).join(", ");
-        hit.setAttribute("aria-label", label);
+        function refreshLabel() {
+          hit.setAttribute("aria-label", stationLines(s).map(function (l) { return l.text; }).join(", "));
+        }
+        refreshLabel();
+        labelRefreshers.push(refreshLabel);
         hit.addEventListener("pointerenter", function (e) {
           cross.setAttribute("visibility", "hidden");
           tipShow(stationLines(s), e.clientX, e.clientY);
@@ -477,7 +481,10 @@
         youBg.setAttribute("x", lx - w / 2); youBg.setAttribute("y", topY - 11);
         youBg.setAttribute("width", w); youBg.setAttribute("height", hh);
         youG.setAttribute("visibility", "visible");
-      }
+      },
+      refreshLabels: function () {
+        for (var j = 0; j < labelRefreshers.length; j++) labelRefreshers[j]();
+      },
     };
     updateYou();
   }
@@ -616,7 +623,11 @@
     plannerHost.appendChild(tbody);
   }
 
-  function renderPlanner() { renderReadouts(); renderPlannerTable(); }
+  function renderPlanner() {
+    renderReadouts();
+    renderPlannerTable();
+    if (chartAPI) chartAPI.refreshLabels();
+  }
 
   if (targetSlider) {
     planTargetH = parseFloat(targetSlider.value) || planTargetH;
