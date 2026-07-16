@@ -242,6 +242,18 @@
     return "buf-ok";
   }
 
+  /* arrival + buffer for a station at the current target pace — the single
+     source both the tooltip and the planner table render from */
+  function planFor(s) {
+    var arriveMin = fracAtKm(s.x_km) * planTargetH * 60;
+    var closeMin = s.hard && s.closes && s.n !== "S" ? closesToMin(s.closes) : null;
+    return {
+      arrive: fmtClock(arriveMin),
+      closeMin: closeMin,
+      bufMin: closeMin === null ? null : closeMin - arriveMin,
+    };
+  }
+
   function gradientAt(idx) {
     var km = track[idx][0];
     var a = idx, b = idx;
@@ -260,12 +272,9 @@
     if (s.aid) lines.push({ text: "Aid: " + (s.aid === "LS" ? "liquid + solid" : "liquid only") });
     if (s.closes) lines.push({ text: "Closes " + s.closes });
     /* pace-planner arrival at the chosen finish time */
-    var frac = fracAtKm(s.x_km);
-    lines.push({ text: "Arrive ~" + fmtClock(frac * planTargetH * 60) + " (" + fmtDur(planTargetH) + " pace)" });
-    if (s.hard && s.closes && s.n !== "S") {
-      var buf = closesToMin(s.closes) - frac * planTargetH * 60;
-      lines.push({ text: "Buffer " + fmtBuf(buf) });
-    }
+    var plan = planFor(s);
+    lines.push({ text: "Arrive ~" + plan.arrive + " (" + fmtDur(planTargetH) + " pace)" });
+    if (plan.bufMin !== null) lines.push({ text: "Buffer " + fmtBuf(plan.bufMin) });
     var sup = [];
     if (s.crew) sup.push("crew");
     if (s.bag) sup.push("drop-bag");
@@ -588,19 +597,16 @@
     var tbody = document.createElement("tbody");
     for (i = 0; i < C.stations.length; i++) {
       var s = C.stations[i];
-      var frac = fracAtKm(s.x_km);
+      var plan = planFor(s);
       var tr = document.createElement("tr");
-      var isCut = s.hard && s.closes && s.n !== "S";
       if (s.hard && s.closes) tr.className = "hard";
       td(tr, s.n, "left");
       td(tr, s.name, "left");
       td(tr, fmtDist(s.km), "num");
-      td(tr, fmtClock(frac * planTargetH * 60), "num");
-      if (isCut) {
-        var closeMin = closesToMin(s.closes);
-        var buf = closeMin - frac * planTargetH * 60;
-        td(tr, fmtClock(closeMin), "num");
-        td(tr, fmtBuf(buf), "num " + bufClass(buf));
+      td(tr, plan.arrive, "num");
+      if (plan.bufMin !== null) {
+        td(tr, fmtClock(plan.closeMin), "num");
+        td(tr, fmtBuf(plan.bufMin), "num " + bufClass(plan.bufMin));
       } else {
         td(tr, "—", "num");
         td(tr, "—", "num");
