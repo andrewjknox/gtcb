@@ -1,5 +1,11 @@
 # pages.yml — deploy site/ to GitHub Pages.
 # One-time setup by the owner: Settings → Pages → Source: GitHub Actions.
+#
+# PR previews: the orphan `previews` branch (maintained by pr-preview.yml)
+# holds a pr-<N>/ snapshot of site/ per open PR; it is folded into the
+# deployed artifact under previews/, so production and previews ship in one
+# Pages deployment. Site content always builds from the checked-out main —
+# a missing previews branch just means a production-only deploy.
 
 name: pages
 
@@ -24,6 +30,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Fold in PR previews (previews branch, if present)
+        run: |
+          if git fetch --depth 1 origin previews 2>/dev/null; then
+            mkdir -p site/previews
+            git archive FETCH_HEAD | tar -x -C site/previews
+            echo "Included previews:" && ls site/previews
+          else
+            echo "No previews branch — production-only deploy."
+          fi
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -1,0 +1,131 @@
+# pr-preview.yml — per-PR preview deployments.
+#
+# Every open PR that touches site/ gets a live snapshot at
+#   https://andrewjknox.github.io/gtcb/previews/pr-<N>/
+#
+# Mechanics: snapshots live as pr-<N>/ folders on the orphan `previews`
+# branch; pages.yml folds that branch into the production Pages artifact
+# under previews/ on every deploy (a repo gets exactly one Pages site, so
+# previews ride along inside it rather than replacing it). This workflow
+# updates the branch on PR open/update, deletes the folder on close,
+# re-dispatches pages.yml (site content still builds from main, so
+# production is unaffected), and keeps a sticky PR comment pointing at the
+# URL. Previews work at a subpath because all site/ URLs are relative —
+# CLAUDE.md invariant 3a, enforced by Gate C.
+#
+# No secrets: GITHUB_TOKEN covers the branch push, the workflow dispatch
+# (workflow_dispatch is exempt from the no-recursive-triggers rule), and the
+# PR comment. Same-repo PRs only — fork PRs get a read-only token.
+
+name: pr-preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths: ["site/**"]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number to (re)deploy or clean up a preview for"
+        required: true
+
+permissions:
+  contents: write        # push to the previews branch
+  pull-requests: write   # sticky comment
+  actions: write         # dispatch pages.yml
+
+# the previews branch is shared across PRs — serialise all runs
+concurrency:
+  group: pr-preview
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve PR context
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PR="${{ github.event.inputs.pr }}"
+            STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state -q .state)
+            if [ "$STATE" = "OPEN" ]; then ACTION=deploy; else ACTION=remove; fi
+          else
+            PR="${{ github.event.pull_request.number }}"
+            if [ "${{ github.event.action }}" = "closed" ]; then ACTION=remove; else ACTION=deploy; fi
+          fi
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+          echo "action=$ACTION" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout PR merge result
+        if: steps.pr.outputs.action == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ steps.pr.outputs.pr }}/merge
+          path: src
+
+      - name: Update previews branch
+        id: update
+        env:
+          PR: ${{ steps.pr.outputs.pr }}
+          ACTION: ${{ steps.pr.outputs.action }}
+          REPO_URL: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+        run: |
+          set -e
+          if ! git clone --depth 1 --branch previews "$REPO_URL" previews 2>/dev/null; then
+            mkdir -p previews
+            cd previews
+            git init -q -b previews
+            git remote add origin "$REPO_URL"
+            printf '# PR previews\n\nMachine-managed by pr-preview.yml — one pr-<N>/ site snapshot per open PR.\nServed at /gtcb/previews/ by pages.yml. Do not edit by hand.\n' > README.md
+            cd ..
+          fi
+          cd previews
+          rm -rf "pr-${PR}"
+          if [ "$ACTION" = "deploy" ]; then
+            cp -r ../src/site "pr-${PR}"
+          fi
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No snapshot change — skipping push and redeploy."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git -c user.name="github-actions[bot]" \
+                -c user.email="github-actions[bot]@users.noreply.github.com" \
+                commit -q -m "preview: pr-${PR} ${ACTION}"
+            git push -q origin previews
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Redeploy Pages
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
+
+      - name: Sticky PR comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.pr.outputs.pr }}
+          ACTION: ${{ steps.pr.outputs.action }}
+        run: |
+          MARKER="<!-- pr-preview-bot -->"
+          URL="https://andrewjknox.github.io/gtcb/previews/pr-${PR}/"
+          if [ "$ACTION" = "deploy" ]; then
+            BODY="$MARKER
+          ⛰️ **Preview deployed:** ${URL}
+
+          Rebuilds on every push to this PR (allow ~1 min for Pages); removed automatically when the PR closes."
+          else
+            BODY="$MARKER
+          Preview removed — PR closed."
+          fi
+          CID=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate \
+                  -q ".[] | select(.body | startswith(\"$MARKER\")) | .id" | head -1)
+          if [ -n "$CID" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$CID" -f body="$BODY" >/dev/null
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$BODY" >/dev/null
+          fi
