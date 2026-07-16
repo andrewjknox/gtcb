@@ -90,13 +90,286 @@
   var maxKm = track[track.length - 1][0];
   var Y_MIN = 200, Y_MAX = 1600; // metres, clean bounds around 257–1520
 
-  function nearestIdx(km) {
-    var lo = 0, hi = track.length - 1;
+  /* binary search over any ascending indexed sequence: [lo, hi] adjacent
+     indices spanning v — the one bracketing loop for track and cumEff alike */
+  function bracket(get, len, v) {
+    var lo = 0, hi = len - 1;
     while (hi - lo > 1) {
       var mid = (lo + hi) >> 1;
-      if (track[mid][0] < km) lo = mid; else hi = mid;
+      if (get(mid) < v) lo = mid; else hi = mid;
     }
-    return (km - track[lo][0] < track[hi][0] - km) ? lo : hi;
+    return [lo, hi];
+  }
+  function trackKmAt(i) { return track[i][0]; }
+  function cumEffAt(i) { return cumEff[i]; }
+
+  function nearestIdx(km) {
+    var b = bracket(trackKmAt, track.length, km);
+    return (km - track[b[0]][0] < track[b[1]][0] - km) ? b[0] : b[1];
+  }
+
+  /* ---------- pace / cut-off planner model ---------- */
+  /* Cumulative Naismith/Langmuir "effort" (km-equivalents) along the track,
+     then anchored through the official hard cut-offs so a 24 h finish
+     reproduces the organiser's schedule exactly; any other finish time just
+     scales the same normalised curve. */
+
+  var chartAPI = null;    // { setYou, refreshLabels } — rebound on every renderChart
+
+  var cumEff = [0];
+  (function () {
+    var e = 0;
+    for (var i = 1; i < track.length; i++) {
+      var dkm = track[i][0] - track[i - 1][0];
+      var dele = track[i][1] - track[i - 1][1];
+      e += dkm;                                  // flat distance (km)
+      if (dele > 0) {
+        e += dele / 120;                         // Naismith: 600 m climb = 5 km flat
+      } else {
+        var desc = -dele;
+        var grade = dkm > 0 ? desc / (dkm * 1000) : 0;
+        if (grade > 0.20) e += desc / 400;       // steep-descent penalty (> ~20%)
+      }
+      cumEff[i] = e;
+    }
+  })();
+  var totalEff = cumEff[cumEff.length - 1];
+
+  /* interpolate along the track: col 0 = cumulative effort, col 1 = elevation */
+  function interpTrack(km, col) {
+    if (km <= track[0][0]) return col ? track[0][1] : 0;
+    if (km >= maxKm) return col ? track[track.length - 1][1] : totalEff;
+    var b = bracket(trackKmAt, track.length, km), lo = b[0], hi = b[1];
+    var span = track[hi][0] - track[lo][0];
+    var t = span > 0 ? (km - track[lo][0]) / span : 0;
+    if (col) return track[lo][1] + t * (track[hi][1] - track[lo][1]);
+    return cumEff[lo] + t * (cumEff[hi] - cumEff[lo]);
+  }
+  function effortAtKm(km) { return interpTrack(km, 0); }
+  function eleAtKm(km) { return interpTrack(km, 1); }
+
+  function kmAtEffort(e) {
+    if (e <= 0) return track[0][0];
+    if (e >= totalEff) return maxKm;
+    var b = bracket(cumEffAt, cumEff.length, e), lo = b[0], hi = b[1];
+    var span = cumEff[hi] - cumEff[lo];
+    var t = span > 0 ? (e - cumEff[lo]) / span : 0;
+    return track[lo][0] + t * (track[hi][0] - track[lo][0]);
+  }
+
+  var LIMIT_MIN = (C.official && C.official.limit_h ? C.official.limit_h : 24) * 60;
+
+  /* race epoch — single source: C.official.start ("FRI 13 NOV 2026 23:00").
+     START_MIN is absolute minutes from 00:00 on DAYS[0]. */
+  var DAYS = ["FRI", "SAT", "SUN"];
+  var startMtch = /^([A-Z]{3})\b.*?(\d{1,2}):(\d{2})\s*$/.exec((C.official && C.official.start) || "");
+  var START_MIN = startMtch
+    ? Math.max(0, DAYS.indexOf(startMtch[1])) * 1440 + (+startMtch[2]) * 60 + (+startMtch[3])
+    : 1380; // Fri 23:00
+  var closesRe = new RegExp("(\\d{1,2}):(\\d{2})\\s*(" + DAYS.join("|") + ")");
+
+  /* "HH:MM DAY" -> elapsed minutes from the start */
+  function closesToMin(str) {
+    var mtch = closesRe.exec(str || "");
+    if (!mtch) return null;
+    return DAYS.indexOf(mtch[3]) * 1440 + (+mtch[1]) * 60 + (+mtch[2]) - START_MIN;
+  }
+
+  /* hard controls are the anchors: frac = closes / 24 h, rawEff = effort at km.
+     The start (frac 0) and finish (frac 1) anchors are explicit, not read from
+     the station rows — anchors always has ≥2 entries bounding [0,1], so the
+     model degrades to the pure effort curve if no closes string parses. */
+  var anchors = [{ km: track[0][0], rawEff: 0, frac: 0 }];
+  (function () {
+    for (var i = 0; i < C.stations.length; i++) {
+      var st = C.stations[i];
+      if (!st.hard || !st.closes) continue;
+      var cm = closesToMin(st.closes);
+      if (cm === null || cm <= 0 || cm > LIMIT_MIN) continue;
+      anchors.push({ km: st.x_km, rawEff: effortAtKm(st.x_km), frac: cm / LIMIT_MIN });
+    }
+    anchors.push({ km: maxKm, rawEff: totalEff, frac: 1 });
+  })();
+
+  /* normalised effort-fraction at a km: piecewise-linear rescale of the raw
+     effort curve so each hard-control km lands exactly on its official frac */
+  function fracAtKm(km) {
+    if (predOn()) return predMinAtKm(km) / (PRED.finH * 60);
+    var re = effortAtKm(km);
+    if (re <= anchors[0].rawEff) return anchors[0].frac;
+    for (var i = 1; i < anchors.length; i++) {
+      if (re <= anchors[i].rawEff) {
+        var a = anchors[i - 1], b = anchors[i], sp = b.rawEff - a.rawEff;
+        return a.frac + (sp > 0 ? (re - a.rawEff) / sp : 0) * (b.frac - a.frac);
+      }
+    }
+    return anchors[anchors.length - 1].frac;
+  }
+  /* invert: km for a normalised effort fraction (drives the "you are here" mark) */
+  function kmAtFrac(f) {
+    f = Math.max(0, Math.min(1, f));
+    if (predOn()) return predKmAtMin(f * PRED.finH * 60);
+    var i = 1;
+    while (i < anchors.length && f > anchors[i].frac) i++;
+    if (i >= anchors.length) return maxKm;
+    var a = anchors[i - 1], b = anchors[i], sp = b.frac - a.frac;
+    var eff = a.rawEff + (sp > 0 ? (f - a.frac) / sp : 0) * (b.rawEff - a.rawEff);
+    return kmAtEffort(eff);
+  }
+  function pad2(n) { n = Math.round(n); return (n < 10 ? "0" : "") + n; }
+  /* elapsed minutes from the start -> "HH:MM DAY" clock time */
+  function fmtClock(elapsedMin) {
+    var abs = START_MIN + Math.round(elapsedMin);
+    var day = Math.floor(abs / 1440);
+    var mday = ((abs % 1440) + 1440) % 1440;
+    var lbl = DAYS[Math.max(0, Math.min(DAYS.length - 1, day))];
+    return pad2(Math.floor(mday / 60)) + ":" + pad2(mday % 60) + " " + lbl;
+  }
+  function fmtDur(h) {
+    var H = Math.floor(h + 1e-9), M = Math.round((h - H) * 60);
+    if (M === 60) { H++; M = 0; }
+    return H + ":" + pad2(M);
+  }
+  /* both round to whole minutes first so sign and colour always agree */
+  function fmtBuf(min) {
+    min = Math.round(min);
+    var s = min < 0 ? "−" : "+", a = Math.abs(min);
+    if (a >= 60) return s + Math.floor(a / 60) + "h" + pad2(a % 60);
+    return s + a + "m";
+  }
+  function bufClass(min) {
+    min = Math.round(min);
+    if (min < 0) return "buf-neg";
+    if (min < 15) return "buf-bad";
+    if (min < 60) return "buf-tight";
+    return "buf-ok";
+  }
+
+  /* arrival + buffer for a station at the current target pace — the single
+     source both the tooltip and the planner table render from */
+  function planFor(s) {
+    var arriveMin = fracAtKm(s.x_km) * targetH() * 60;
+    var closeMin = s.hard && s.closes && s.n !== "S" ? closesToMin(s.closes) : null;
+    return {
+      arrive: fmtClock(arriveMin),
+      closeMin: closeMin,
+      bufMin: closeMin === null ? null : Math.round(closeMin - arriveMin),
+    };
+  }
+
+  /* ---------- predicted mode — 46K pace-vs-grade model ---------- */
+  /* data.js carries paceModel: a moving-speed-by-grade curve fitted from the
+     Costa Blanca Trails 46K (Nov 2022, same mountains) plus its knobs — aid
+     stoppage, flat ultra fade, night slowdown, and a readiness mapping fed by
+     recent training weeks. Walking the curve over the track gives an absolute
+     per-station arrival prediction, unlike the cut-off-anchored effort curve
+     above, which distributes a chosen finish time. When the PREDICTED toggle
+     is on, targetH/fracAtKm/kmAtFrac dispatch here and everything downstream
+     (table, tooltips, you-are-here) follows. */
+
+  var predBtn = document.getElementById("pred-toggle");
+  var predNote = document.getElementById("pred-note");
+  var PRED = null; // { cum: predicted minutes at each track index, finH }
+
+  (function () {
+    var D = window.GTCB_DATA;
+    var model = D && D.paceModel;
+    if (!model || !predBtn) return;
+
+    /* readiness: vert attainment over the last N completed training weeks,
+       mapped to a speed factor (floor + span * attainment, capped at 1) */
+    var att = 1, attLabel = "no completed training weeks yet — assuming on plan";
+    (function () {
+      var weeks = (D.index && D.index.weeks) || [];
+      var done = [];
+      for (var i = 0; i < weeks.length; i++) {
+        var s = D.summaries[weeks[i]];
+        if (s && s.days_elapsed >= 7 && s.vert && s.vert.target_m > 0) done.push(s);
+      }
+      done = done.slice(-model.readiness.weeks);
+      if (!done.length) return;
+      var act = 0, tgt = 0;
+      for (var j = 0; j < done.length; j++) { act += done[j].vert.actual_m; tgt += done[j].vert.target_m; }
+      att = Math.max(0, Math.min(1, act / tgt));
+      attLabel = done[0].iso_week.slice(5) + "–" + done[done.length - 1].iso_week.slice(5) +
+        " vert " + Math.round((act / tgt) * 100) + "% of plan";
+    })();
+    var speedFactor = model.readiness.floor + model.readiness.span * att;
+
+    var curve = model.curve;
+    /* beyond the end bins speed extends at constant vertical rate — on very
+       steep ground climb/descent metres-per-hour plateau, they don't clamp */
+    function speedAt(g) {
+      var lo = curve[0], hi = curve[curve.length - 1];
+      if (g < lo.g) return (lo.v * Math.abs(lo.g)) / Math.abs(g);
+      if (g > hi.g) return (hi.v * hi.g) / g;
+      for (var i = 1; i < curve.length; i++) {
+        if (g <= curve[i].g) {
+          var a = curve[i - 1], b = curve[i];
+          return a.v + ((g - a.g) / (b.g - a.g)) * (b.v - a.v);
+        }
+      }
+      return hi.v;
+    }
+
+    /* the raw trace over-reads climb vs the official figure (GPS noise) but
+       the 46K curve was fitted on clean barometric data — normalise grades
+       so total climb matches the organisers' number */
+    var climb = 0;
+    for (var k = 1; k < track.length; k++) {
+      var de = track[k][1] - track[k - 1][1];
+      if (de > 0) climb += de;
+    }
+    var norm = (C.official && C.official.gain_m ? C.official.gain_m : climb) / climb;
+
+    var cum = [0], tMin = 0;
+    for (k = 1; k < track.length; k++) {
+      var dm = (track[k][0] - track[k - 1][0]) * 1000;
+      if (dm > 0) {
+        var g = ((track[k][1] - track[k - 1][1]) * norm) / dm * 100;
+        var dt = dm / (speedAt(g) * speedFactor) / 60;  // moving minutes
+        dt *= model.stop_ratio * model.fade;            // aid stops + ultra fade
+        var clock = (START_MIN + tMin) % 1440;
+        if (clock >= model.night.sunset_min || clock < model.night.sunrise_min) dt *= model.night.mult;
+        tMin += dt;
+      }
+      cum[k] = tMin;
+    }
+
+    PRED = { cum: cum, finH: tMin / 60 };
+    predBtn.hidden = false;
+    predBtn.textContent = "PREDICTED (" + fmtDur(PRED.finH) + ")";
+    if (predNote) {
+      predNote.textContent = "PREDICTED " + fmtDur(PRED.finH) + " — pace-vs-grade from the CB Trails 46K (Nov 2022, " +
+        "same mountains) walked over the 102K, with the 46K's aid-stop ratio, +" +
+        Math.round((model.fade - 1) * 100) + "% ultra fade for double the equivalent distance, +" +
+        Math.round((model.night.mult - 1) * 100) + "% in darkness, × " +
+        Math.round(speedFactor * 100) + "% readiness from training (" + attLabel + "). " +
+        "Arrivals are absolute — the target slider is bypassed while this is on.";
+    }
+  })();
+
+  function predOn() {
+    return !!PRED && predBtn.getAttribute("aria-pressed") === "true";
+  }
+  function predMinAt(i) { return PRED.cum[i]; }
+  function predMinAtKm(km) {
+    var cum = PRED.cum;
+    if (km <= track[0][0]) return 0;
+    if (km >= maxKm) return cum[cum.length - 1];
+    var b = bracket(trackKmAt, track.length, km), lo = b[0], hi = b[1];
+    var span = track[hi][0] - track[lo][0];
+    var t = span > 0 ? (km - track[lo][0]) / span : 0;
+    return cum[lo] + t * (cum[hi] - cum[lo]);
+  }
+  function predKmAtMin(min) {
+    var cum = PRED.cum, total = cum[cum.length - 1];
+    if (min <= 0) return track[0][0];
+    if (min >= total) return maxKm;
+    var b = bracket(predMinAt, cum.length, min), lo = b[0], hi = b[1];
+    var span = cum[hi] - cum[lo];
+    var t = span > 0 ? (min - cum[lo]) / span : 0;
+    return track[lo][0] + t * (track[hi][0] - track[lo][0]);
   }
 
   function gradientAt(idx) {
@@ -116,6 +389,10 @@
     ];
     if (s.aid) lines.push({ text: "Aid: " + (s.aid === "LS" ? "liquid + solid" : "liquid only") });
     if (s.closes) lines.push({ text: "Closes " + s.closes });
+    /* pace-planner arrival at the chosen finish time */
+    var plan = planFor(s);
+    lines.push({ text: "Arrive ~" + plan.arrive + " (" + fmtDur(targetH()) + " pace)" });
+    if (plan.bufMin !== null) lines.push({ text: "Buffer " + fmtBuf(plan.bufMin) });
     var sup = [];
     if (s.crew) sup.push("crew");
     if (s.bag) sup.push("drop-bag");
@@ -266,6 +543,7 @@
        a red circle never occurs. The start carries no marker. */
     var mk = el("g", {}, svg);
     var R = narrow ? 4 : 5;
+    var labelRefreshers = []; // aria-labels bake in the target pace — re-run on planner change
     for (i = 0; i < C.stations.length; i++) {
       (function (s) {
         if (s.n === "S") return;
@@ -277,8 +555,11 @@
         }
         /* oversized invisible hit target, keyboard-reachable */
         var hit = el("circle", { cx: sx, cy: sy, r: 14, fill: SURFACE, "fill-opacity": "0", tabindex: "0", role: "img", class: "station-hit" }, mk);
-        var label = stationLines(s).map(function (l) { return l.text; }).join(", ");
-        hit.setAttribute("aria-label", label);
+        function refreshLabel() {
+          hit.setAttribute("aria-label", stationLines(s).map(function (l) { return l.text; }).join(", "));
+        }
+        refreshLabel();
+        labelRefreshers.push(refreshLabel);
         hit.addEventListener("pointerenter", function (e) {
           cross.setAttribute("visibility", "hidden");
           tipShow(stationLines(s), e.clientX, e.clientY);
@@ -294,6 +575,36 @@
         hit.addEventListener("blur", tipHide);
       })(C.stations[i]);
     }
+
+    /* ---------- you-are-here marker (pace planner) ---------- */
+    var youG = el("g", { visibility: "hidden", "aria-hidden": "true" }, svg);
+    var youLine = el("line", { stroke: "#DED087", "stroke-width": "1.5", "stroke-dasharray": "4 3", "stroke-opacity": "0.9" }, youG);
+    var youBg = el("rect", { fill: SURFACE, stroke: "#DED087", "stroke-width": "1" }, youG);
+    var youTxt = el("text", { class: "you-label", "text-anchor": "middle" }, youG);
+    var youDot = el("circle", { r: narrow ? 4.5 : 5.5, fill: "#DED087", stroke: SURFACE, "stroke-width": "2" }, youG);
+
+    chartAPI = {
+      setYou: function (km) {
+        var ele = eleAtKm(km);
+        var xx = X(km), yy = Y(Math.max(Y_MIN, Math.min(Y_MAX, ele)));
+        var topY = m.top + 11;
+        youLine.setAttribute("x1", xx); youLine.setAttribute("x2", xx);
+        youLine.setAttribute("y1", topY + 3); youLine.setAttribute("y2", yy - 5);
+        youDot.setAttribute("cx", xx); youDot.setAttribute("cy", yy);
+        var label = fmtDist(km) + " · " + fmtEle(ele);
+        youTxt.textContent = label;
+        var w = label.length * 6.4 + 12, hh = 15;
+        var lx = Math.max(m.left + w / 2, Math.min(xx, m.left + pw - w / 2));
+        youTxt.setAttribute("x", lx); youTxt.setAttribute("y", topY);
+        youBg.setAttribute("x", lx - w / 2); youBg.setAttribute("y", topY - 11);
+        youBg.setAttribute("width", w); youBg.setAttribute("height", hh);
+        youG.setAttribute("visibility", "visible");
+      },
+      refreshLabels: function () {
+        for (var j = 0; j < labelRefreshers.length; j++) labelRefreshers[j]();
+      },
+    };
+    updateYou();
   }
 
   /* ---------- rutometro table (same data as the chart) ---------- */
@@ -304,6 +615,20 @@
     c.textContent = text;
     tr.appendChild(c);
     return c;
+  }
+
+  function buildHead(host, cols, isNum) {
+    var thead = document.createElement("thead");
+    var hr = document.createElement("tr");
+    for (var i = 0; i < cols.length; i++) {
+      var th = document.createElement("th");
+      th.scope = "col";
+      th.textContent = cols[i];
+      th.className = isNum(i) ? "num" : "left";
+      hr.appendChild(th);
+    }
+    thead.appendChild(hr);
+    host.appendChild(thead);
   }
 
   function badge(cell, cls, text) {
@@ -317,21 +642,11 @@
   function renderTable() {
     if (!tableHost) return;
     tableHost.textContent = "";
-    var head = ["CTRL", "STATION", "DIST", "ALT", "LEG", "LEG D+", "LEG D−", "AID", "CLOSES", "SUPPORT"];
-    var thead = document.createElement("thead");
-    var hr = document.createElement("tr");
-    for (var i = 0; i < head.length; i++) {
-      var th = document.createElement("th");
-      th.scope = "col";
-      th.textContent = head[i];
-      th.className = (i >= 2 && i <= 6) ? "num" : "left";
-      hr.appendChild(th);
-    }
-    thead.appendChild(hr);
-    tableHost.appendChild(thead);
+    buildHead(tableHost, ["CTRL", "STATION", "DIST", "ALT", "LEG", "LEG D+", "LEG D−", "AID", "CLOSES", "SUPPORT"],
+      function (i) { return i >= 2 && i <= 6; });
 
     var tbody = document.createElement("tbody");
-    for (i = 0; i < C.stations.length; i++) {
+    for (var i = 0; i < C.stations.length; i++) {
       var s = C.stations[i];
       var tr = document.createElement("tr");
       if (s.hard) tr.className = "hard";
@@ -355,15 +670,135 @@
     tableHost.appendChild(tbody);
   }
 
+  /* ---------- pace planner UI ---------- */
+
+  var targetSlider = document.getElementById("target-slider");
+  var raceSlider = document.getElementById("raceclock-slider");
+  var targetOut = document.getElementById("target-readout");
+  var raceOut = document.getElementById("raceclock-readout");
+  var plannerHost = document.getElementById("planner-table");
+
+  /* the sliders are the single source of truth for the planner state —
+     except in predicted mode, where the model's finish time takes over and
+     the target slider is disabled until the toggle is released */
+  function targetH() {
+    if (predOn()) return PRED.finH;
+    return (targetSlider && parseFloat(targetSlider.value)) || 22;
+  }
+  function raceMin() { return raceSlider ? parseFloat(raceSlider.value) || 0 : 0; }
+  function raceFrac() { return (raceMin() / 60) / targetH(); }
+
+  function updateYou() {
+    if (!chartAPI) return;
+    chartAPI.setYou(kmAtFrac(raceFrac()));
+  }
+
+  function outSpan(parent, cls, text) {
+    var s = document.createElement("span");
+    if (cls) s.className = cls;
+    s.textContent = text;
+    parent.appendChild(s);
+  }
+
+  function renderReadouts() {
+    if (targetOut) {
+      targetOut.textContent = "";
+      outSpan(targetOut, null, (predOn() ? "PREDICTED " : "TARGET ") + fmtDur(targetH()) + " ");
+      outSpan(targetOut, "finish", "→ FINISH " + fmtClock(targetH() * 60));
+    }
+    if (raceOut) {
+      raceOut.textContent = "";
+      var pinned = raceMin() > targetH() * 60;
+      outSpan(raceOut, null, fmtClock(raceMin()) + " ");
+      outSpan(raceOut, "finish", "@ " + fmtDist(kmAtFrac(raceFrac())) + (pinned ? " (FIN)" : ""));
+    }
+  }
+
+  function renderPlannerTable() {
+    if (!plannerHost) return;
+    plannerHost.textContent = "";
+    buildHead(plannerHost, ["CTRL", "STATION", "DIST", "ARRIVAL", "CLOSES", "BUFFER"],
+      function (i) { return i >= 2; });
+
+    var tbody = document.createElement("tbody");
+    for (var i = 0; i < C.stations.length; i++) {
+      var s = C.stations[i];
+      var plan = planFor(s);
+      var tr = document.createElement("tr");
+      if (s.hard && s.closes) tr.className = "hard";
+      td(tr, s.n, "left");
+      td(tr, s.name, "left");
+      td(tr, fmtDist(s.km), "num");
+      td(tr, plan.arrive, "num");
+      if (plan.bufMin !== null) {
+        td(tr, fmtClock(plan.closeMin), "num");
+        td(tr, fmtBuf(plan.bufMin), "num " + bufClass(plan.bufMin));
+      } else {
+        td(tr, "—", "num");
+        td(tr, "—", "num");
+      }
+      tbody.appendChild(tr);
+    }
+    plannerHost.appendChild(tbody);
+  }
+
+  function renderPlanner() {
+    renderReadouts();
+    renderPlannerTable();
+    if (chartAPI) chartAPI.refreshLabels();
+  }
+
+  /* collapse event bursts (slider drags, resize) to one run per frame */
+  function coalesce(fn) {
+    var pending = false;
+    return function () {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; fn(); });
+    };
+  }
+
+  if (targetSlider) {
+    targetSlider.addEventListener("input", coalesce(function () {
+      renderPlanner();
+      updateYou();
+    }));
+  }
+  if (raceSlider) {
+    raceSlider.addEventListener("input", coalesce(function () {
+      renderReadouts();
+      updateYou();
+    }));
+  }
+  /* flip the PREDICTED toggle without rendering — callers render once after.
+     Engaging snaps the (disabled) slider to the predicted time, so the thumb
+     agrees with the readout and releasing hands over a matching manual target. */
+  function setPred(on) {
+    if (!PRED) return;
+    predBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    if (targetSlider) {
+      targetSlider.disabled = on;
+      if (on) {
+        var lo = parseFloat(targetSlider.min) || 16, hi = parseFloat(targetSlider.max) || 24;
+        targetSlider.value = String(Math.min(hi, Math.max(lo, Math.round(PRED.finH * 4) / 4)));
+      }
+    }
+    if (predNote) predNote.hidden = !on;
+  }
+
+  if (predBtn) {
+    predBtn.addEventListener("click", function () {
+      setPred(!predOn());
+      renderPlanner();
+      updateYou();
+    });
+  }
+
   /* ---------- wire up ---------- */
 
-  function renderAll() { renderChart(); renderTable(); }
+  function renderAll() { renderChart(); renderTable(); renderPlanner(); }
 
-  var raf = null;
-  window.addEventListener("resize", function () {
-    if (raf) return;
-    raf = requestAnimationFrame(function () { raf = null; renderChart(); });
-  });
+  window.addEventListener("resize", coalesce(renderChart));
   window.addEventListener("gtcb:units", renderAll);
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") clearHover();

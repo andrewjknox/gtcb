@@ -1032,6 +1032,89 @@ tr.current-week td:first-child {
 
 .tooltip .tip-dim { color: #8076F1; }
 
+/* pace / cut-off planner */
+
+.planner-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin: 10px 0 12px;
+}
+
+.planner-slider {
+  border: 1px solid #5955E0;
+  padding: 10px 12px;
+}
+
+.planner-slider label {
+  display: block;
+  color: #8076F1;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.planner-slider output {
+  display: block;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  margin: 5px 0 9px;
+  text-shadow: 2px 2px 0 #5955E0;
+}
+
+.planner-slider output .finish {
+  display: inline-block;
+  color: #65DBEF;
+  font-size: 13px;
+  font-weight: normal;
+  text-shadow: none;
+}
+
+.planner-slider input[type="range"] {
+  width: 100%;
+  accent-color: #3EB849;
+  cursor: pointer;
+}
+
+.preset-row {
+  margin-top: 10px;
+  display: inline-flex;
+}
+
+/* PREDICTED is a latching toggle — pressed reads like the metric switch */
+.metric-btn[aria-pressed="true"] { color: #000000; background: #DED087; }
+
+.metric-btn[aria-pressed="true"]:hover,
+.metric-btn[aria-pressed="true"]:focus { color: #000000; background: #DED087; }
+
+.planner-slider input[type="range"]:disabled {
+  accent-color: #5955E0;
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pred-note { color: #DED087; }
+
+.planner-table { min-width: 640px; }
+
+.planner-table tr.hard td { color: #FFFFFF; }
+
+/* buffer tiers — one definition serves the planner cells and the legend */
+.buf-ok { color: #3EB849; font-weight: bold; }
+.buf-tight { color: #CCC35E; font-weight: bold; }
+.buf-bad { color: #FF897D; font-weight: bold; }
+.buf-neg { color: #DB6559; font-weight: bold; }
+
+.profile-svg .you-label {
+  fill: #DED087;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
 .ruto-table { min-width: 900px; }
 
 .ruto-table .support-cell { white-space: nowrap; }
