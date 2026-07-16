@@ -1,6 +1,7 @@
 # pr-preview.yml — per-PR preview deployments.
 #
-# Every open PR that touches site/ gets a live snapshot at
+# Every open PR that touches anything affecting the rendered site — site/
+# itself or the data/ it is generated from — gets a live snapshot at
 #   https://andrewjknox.github.io/gtcb/previews/pr-<N>/
 #
 # Mechanics: snapshots live as pr-<N>/ folders on the orphan `previews`
@@ -22,7 +23,7 @@ name: pr-preview
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    paths: ["site/**"]
+    paths: ["site/**", "data/**"]
   workflow_dispatch:
     inputs:
       pr:
