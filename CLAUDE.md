@@ -45,7 +45,7 @@ Static dashboard (HTML/JS/Canvas + JSON, no framework) tracking a 23-week ultra 
 - Phases: Base W1–8, Build W9–16, Peak W17–19, Taper W20–22, Race W23.
 - All dates Europe/London; week = Mon 00:00 → Sun 23:59:59.
 - Data files are named by ISO week (`2026-W28.json`).
-- On-foot sport types: Run, TrailRun, VirtualRun, Hike. (Walk excluded — running + hiking only, owner decision 2026-07-13; note some Strava activities are mislabeled `Walk` and will not count until relabeled.)
+- On-foot sport types: Run, TrailRun, VirtualRun, Hike. (Walk excluded — running + hiking only, owner decision 2026-07-13. Walk labels are trusted as-is: never flag or second-guess a `Walk` as a possible mislabelled hike/run — owner decision 2026-07-16.)
 - Left-calf rehab is active — activity descriptions mentioning calf issues must be surfaced as flags.
 
 ## Data shapes
@@ -85,4 +85,6 @@ Plus `data/summary/index.json`: `{ "weeks": ["2026-W24", "..."] }` — manifest 
 
 ## Pipeline & gates
 
-The pipeline runs as a sequential chain of scoped subagents: `data-agent` fetches raw Strava activities for the requested window, then **Gate A** validates the output before `analyst-agent` computes the weekly summary, then **Gate B** validates before `builder-agent` regenerates the static site, then **Gate C** validates before `reviewer-agent` audits the whole run against these invariants, then **Gate D** checks the verdict before publish. Gates live in `.claude/hooks/` as deterministic Node.js/bash scripts (python and jq are unavailable on this machine) wired via `SubagentStop` hooks in `.claude/settings.json` — the pipeline never relies on an agent checking its own work; every handoff is verified by a script that can block.
+**Routine refresh (default — data changed, site code did not):** spawn `data-agent` (haiku) to fetch the week's raw Strava JSON, then run `node scripts/refresh.mjs [iso-week]` from the main thread and commit. The script chains Gate A → `scripts/build/summary.mjs` (deterministic analyst: same math as `scripts/reconcile.mjs`, plus calf flags) → Gate B → copy `data/` → `site/data/` → `inline-data.mjs` → `minify.mjs` → Gate C, and blocks on any failure. No analyst/builder/reviewer agents are spawned — their routine work is deterministic, and an LLM run of it just gets re-verified by these same scripts (path added 2026-07-16 to cut refresh token cost). Gate C's diff-scope check requires a tree where only `site/` + `data/` change: commit any dev work first. Running deterministic scripts is orchestration, not analysis — invariant 1 is satisfied.
+
+**Full chain (site code changes, or judgment needed):** `data-agent` fetches, then **Gate A** validates the output before `analyst-agent` computes the weekly summary, then **Gate B** validates before `builder-agent` regenerates the static site, then **Gate C** validates before `reviewer-agent` audits the whole run against these invariants, then **Gate D** checks the verdict before publish. Gates live in `.claude/hooks/` as deterministic Node.js/bash scripts (python and jq are unavailable on this machine) wired via `SubagentStop` hooks in `.claude/settings.json` — the pipeline never relies on an agent checking its own work; every handoff is verified by a script that can block.

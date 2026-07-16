@@ -11,9 +11,9 @@ knoxy.com/gtcb. No GitHub Pages experience assumed.
 2. **Enable Pages**: repo **Settings → Pages → Build and deployment → Source:
    GitHub Actions** (not "Deploy from a branch"). That's the whole setting — the
    `pages.yml` workflow does the rest on every push to `main` that touches `site/`.
-3. **Add the API key secret**: Settings → Secrets and variables → Actions →
-   New repository secret → name `ANTHROPIC_API_KEY`, value = an Anthropic API
-   key. The scheduled `refresh.yml` workflow needs it to run the pipeline headless.
+3. ~~Add the API key secret~~ — no longer needed (2026-07-16): `refresh.yml`
+   runs the pipeline as a deterministic Node script (`scripts/refresh.mjs`),
+   so headless runs cost no Anthropic API tokens at all.
 
 After the first deploy the site serves at:
 
@@ -64,7 +64,11 @@ as the single source of truth.
 
 ### Schedule
 
-`refresh.yml` runs automatically at (UTC cron; ~1h drift across BST/GMT is fine):
+The cron schedule in `refresh.yml` is currently **disabled** (owner, 2026-07-09).
+Since 2026-07-16 the headless run is free (no API tokens), but without a headless
+Strava fetch a scheduled run can only rebuild from committed raw data, so the
+schedule stays off until that's wired up. The intended times (UTC cron; ~1h
+drift across BST/GMT is fine):
 
 - **Mon + Thu 05:30 UTC** — early-week / mid-week check-in
 - **Sun 20:30 UTC** — end-of-week wrap
@@ -86,18 +90,18 @@ Actions tab → **refresh** workflow → **Run workflow** → optionally type a 
   `site/data/` copies byte-identical to `data/`, all metrics consumed by the JS,
   diff touches only `site/` + `data/`.
 - **Gate D** — the reviewer-agent's verdict is well-formed, covers all 8
-  invariants, and is `pass`.
+  invariants, and is `pass`. (Full agent chain only — routine data refreshes
+  are deterministic and don't produce a new reviewer verdict; see CLAUDE.md
+  "Pipeline & gates".)
 
 ### TODO: Strava token for headless fetch
 
 The interactive Claude session uses claude.ai-managed Strava OAuth, which does
-NOT exist on a CI runner. Until a Strava MCP server is configured in
-`refresh.yml` (see the `Configure Strava MCP` step: it needs a
-`STRAVA_REFRESH_TOKEN` secret plus a `claude mcp add` line), scheduled runs
-**skip the Strava fetch** and rebuild everything from the raw data already
-committed — still useful (recomputes summaries, site, review), but new
-activities only arrive when a fetch runs in an interactive session or the token
-is wired up.
+NOT exist on a CI runner. Until a headless fetch is wired into `refresh.yml`
+(a `STRAVA_REFRESH_TOKEN` secret plus a small script writing the raw schema),
+CI runs **skip the Strava fetch** and rebuild everything from the raw data
+already committed — still useful (recomputes summaries and site data), but new
+activities only arrive when a fetch runs in an interactive session.
 
 ## 4. Privacy note
 

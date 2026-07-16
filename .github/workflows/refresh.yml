@@ -1,14 +1,17 @@
 # refresh.yml — scheduled + on-demand headless run of the GTCB dashboard pipeline.
 #
-# ── Strava MCP caveat (IMPORTANT) ─────────────────────────────────────────────
+# Fully deterministic since 2026-07-16: `node scripts/refresh.mjs` recomputes the
+# summary, rebuilds site data artifacts, and runs gates A–C — no Claude CLI, no
+# ANTHROPIC_API_KEY, zero token cost. The reviewer-agent/Gate D leg only applies
+# when site code changes, which never happens here (this job touches data/ + the
+# generated site artifacts only).
+#
+# ── Strava caveat ─────────────────────────────────────────────────────────────
 # Interactive sessions use claude.ai-managed Strava OAuth, which is NOT available
-# headless on a CI runner. Until a Strava MCP server is configured on the runner
-# with its own token (see TODO at the "Configure Strava MCP" step below — e.g. a
-# STRAVA_REFRESH_TOKEN repo secret + `claude mcp add`), this workflow tolerates
-# its absence: it SKIPS the data-agent fetch and recomputes everything from the
-# raw data already committed in data/raw/ (analyst → builder → reviewer, gates
-# A–D still run — Gate A validates the committed raw files). The workflow is
-# therefore useful immediately; adding the token upgrades it to a full refresh.
+# headless on a CI runner. This workflow therefore rebuilds from the raw data
+# already committed in data/raw/ — fresh weeks arrive via interactive sessions.
+# TODO: a headless Strava fetch (STRAVA_REFRESH_TOKEN secret + a small fetch
+# script writing the raw schema) would upgrade this to a full refresh.
 #
 # Schedule: cron is UTC. 05:30 Mon/Thu and 20:30 Sun approximate the intended
 # Europe/London times and drift by 1h across BST/GMT transitions — acceptable.
@@ -17,9 +20,9 @@ name: refresh
 
 on:
   # Scheduled auto-refresh DISABLED 2026-07-09 by owner to avoid metered
-  # ANTHROPIC_API_KEY costs (headless runs bill per-token, separate from the
-  # Claude subscription). Refreshes are done on demand via a Claude Code chat
-  # session instead. Re-enable by uncommenting the cron lines below.
+  # ANTHROPIC_API_KEY costs. The pipeline is now deterministic (no API cost),
+  # but without a headless Strava fetch a scheduled run can only rebuild from
+  # committed raw data, so the schedule stays off until that TODO is done.
   # schedule:
   #   - cron: "30 5 * * 1,4"   # Mon + Thu 05:30 UTC (~05:30/06:30 London)
   #   - cron: "30 20 * * 0"    # Sun 20:30 UTC (~20:30/21:30 London)
@@ -53,40 +56,10 @@ jobs:
         # No npm install: gate scripts are dependency-free Node;
         # html-validate arrives via `npx --yes` inside Gate C.
 
-      - name: Install Claude Code CLI
-        run: npm install -g @anthropic-ai/claude-code
+      - name: Run pipeline (deterministic — recompute summary, rebuild site data, gates A–C)
+        run: node scripts/refresh.mjs
 
-      - name: Configure Strava MCP (TODO — required for headless data fetch)
-        id: strava
-        env:
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-        run: |
-          # TODO: when a STRAVA_REFRESH_TOKEN secret (plus client id/secret) is
-          # added, configure a Strava MCP server here so the data-agent can
-          # fetch, e.g.:
-          #   claude mcp add strava -- npx -y <strava-mcp-package>
-          # Until then we skip the data-agent and reuse committed raw data.
-          if [ -n "${STRAVA_REFRESH_TOKEN}" ]; then
-            # Token exists but the MCP server config above is still a TODO, so
-            # the fetch cannot work yet. Flip this to true once `claude mcp add`
-            # is wired in.
-            echo "Strava token present, but MCP server config is still a TODO — data-agent will be skipped."
-            echo "strava_enabled=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "No STRAVA_REFRESH_TOKEN secret — data-agent will be skipped."
-            echo "strava_enabled=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Run pipeline headless
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          STRAVA_ENABLED: ${{ steps.strava.outputs.strava_enabled }}
-        run: |
-          claude -p "Read CLAUDE.md fully and obey every invariant. Run the GTCB pipeline for the current week (Europe/London, Mon-Sun). STRAVA_ENABLED=${STRAVA_ENABLED}: if it is not 'true', SKIP the data-agent fetch entirely and recompute from the raw files already committed in data/raw/. Chain: (1) if enabled, data-agent fetches the current week to data/raw/, then run 'bash .claude/hooks/gate-a-raw.sh' and require exit 0; (2) analyst-agent recomputes data/summary/ for every raw week and updates data/summary/index.json, then 'bash .claude/hooks/gate-b-summary.sh' must exit 0; (3) builder-agent refreshes site/ including byte-identical copies of data/plan.json and data/summary/* under site/data/, then 'bash .claude/hooks/gate-c-build.sh' must exit 0; (4) reviewer-agent audits the run and you save its verdict JSON verbatim to data/review/<iso-week>.json, then 'bash .claude/hooks/gate-d-review.sh' must exit 0. If any gate exits non-zero, stop and fail loudly. Do NOT commit or push — CI handles that. Only files under data/ and site/ may change." \
-            --permission-mode acceptEdits \
-            --allowedTools "Read,Write,Edit,Bash,Glob,Grep,Task,Agent"
-
-      # Belt-and-braces: CI must not trust the agent to have run its own gates.
+      # Belt-and-braces: verify independently of the runner script.
       - name: Gate A — raw data
         run: bash .claude/hooks/gate-a-raw.sh
 
@@ -95,9 +68,6 @@ jobs:
 
       - name: Gate C — site build
         run: bash .claude/hooks/gate-c-build.sh
-
-      - name: Gate D — reviewer verdict
-        run: bash .claude/hooks/gate-d-review.sh
 
       - name: Compute commit message
         id: msg
