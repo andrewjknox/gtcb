@@ -24,24 +24,24 @@
   <main data-units-convert>
     <section class="panel doc-section" aria-labelledby="profile-title">
       <div class="panel-head">
-        <h2 id="profile-title">ELEVATION PROFILE</h2>
+        <h2 id="profile-title">ELEVATION PROFILE <button type="button" id="profile-info-btn" class="info-btn" aria-expanded="false" aria-controls="profile-info" aria-label="About the elevation profile">i</button></h2>
         <ul class="legend" aria-hidden="true">
           <li><span class="swatch mk-cutoff"></span> food + liquid + cut-off</li>
           <li><span class="swatch mk-food"></span> food + liquid</li>
           <li><span class="swatch mk-aid"></span> liquid only</li>
         </ul>
       </div>
-      <p>Circular from Finestrat over the Puig Campana, Serrella and Aitana sierras. Three big blocks of climbing &mdash; the Puig Campana wall straight off the start line (in the dark), the long haul to Pla de la Casa at halfway, and the Aitana ridge from km 59 &mdash; then a jagged, descending final third that never quite stops climbing. Hover or tap the trace for spot heights and gradient; markers are the controls after the start line.</p>
+      <p id="profile-info" hidden>Circular from Finestrat over the Puig Campana, Serrella and Aitana sierras. Three big blocks of climbing &mdash; the Puig Campana wall straight off the start line (in the dark), the long haul to Pla de la Casa at halfway, and the Aitana ridge from km 59 &mdash; then a jagged, descending final third that never quite stops climbing. Hover or tap the trace for spot heights and gradient; markers are the controls after the start line.</p>
       <div id="profile-chart" class="profile-wrap"></div>
       <p class="table-note">Squares have food and liquid; the red ones are hard cut-offs &mdash; miss one and you are out. Circles are liquid only. Trace: official GPS track; totals per the organisers: 101.7 km and 6,280 m of climbing.</p>
     </section>
 
     <section class="panel doc-section" aria-labelledby="planner-title">
       <div class="panel-head">
-        <h2 id="planner-title">PACE PLANNER</h2>
+        <h2 id="planner-title">PACE PLANNER <button type="button" id="planner-info-btn" class="info-btn" aria-expanded="false" aria-controls="planner-info" aria-label="How the pace planner works">i</button></h2>
         <span class="tier-badge tag-dsq">Miss one = out</span>
       </div>
-      <p>Pick a target finish time. The planner places you on the course by cumulative <strong>effort</strong> &mdash; climb-weighted, not raw distance &mdash; anchored so the 24-hour line reproduces the official cut-off schedule exactly. <strong>Buffer</strong> is how long you would have in hand at each hard cut-off. Because that schedule is itself exactly 24-hour limit pace, each control&rsquo;s closing time is also its drop-dead departure time &mdash; so the cushion that matters is the buffer. The official cut-offs are always the reference. <strong>PREDICTED</strong> swaps the chosen target for a modelled one: arrival at every control walked from the Costa Blanca Trails 46K pace-vs-grade record and current training, not from a number you picked.</p>
+      <p id="planner-info" hidden>Pick a target finish time. The planner places you on the course by cumulative <strong>effort</strong> &mdash; climb-weighted, not raw distance &mdash; anchored so the 24-hour line reproduces the official cut-off schedule exactly. <strong>Buffer</strong> is how long you would have in hand at each hard cut-off. Because that schedule is itself exactly 24-hour limit pace, each control&rsquo;s closing time is also its drop-dead departure time &mdash; so the cushion that matters is the buffer. The official cut-offs are always the reference. <strong>PREDICTED</strong> swaps the chosen target for a modelled one: arrival at every control walked from the Costa Blanca Trails 46K pace-vs-grade record and current training, not from a number you picked.</p>
       <div class="planner-controls">
         <div class="planner-slider">
           <label for="target-slider">Target finish time</label>
@@ -66,10 +66,10 @@
 
     <section class="panel doc-section" aria-labelledby="ruto-title">
       <div class="panel-head">
-        <h2 id="ruto-title">RUT&Oacute;METRO &mdash; AID &amp; CUT-OFFS</h2>
+        <h2 id="ruto-title">RUT&Oacute;METRO &mdash; AID &amp; CUT-OFFS <button type="button" id="ruto-info-btn" class="info-btn" aria-expanded="false" aria-controls="ruto-info" aria-label="About the rut&oacute;metro">i</button></h2>
         <span class="tier-badge tag-dsq">Miss one = out</span>
       </div>
-      <p>Every control with its leg (distance, climb and descent since the previous control), what is on the table when you get there, and when it shuts. White rows are hard cut-offs. Start Friday 23:00; the finish closes 24 hours later.</p>
+      <p id="ruto-info" hidden>Every control with its leg (distance, climb and descent since the previous control), what is on the table when you get there, and when it shuts. White rows are hard cut-offs. Start Friday 23:00; the finish closes 24 hours later.</p>
       <div class="table-scroll">
         <table id="ruto-table" class="cutoff-table ruto-table"></table>
       </div>

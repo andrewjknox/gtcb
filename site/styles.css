@@ -289,6 +289,35 @@ canvas {
 .metric-btn.active:hover,
 .metric-btn.active:focus { color: #000000; background: #65DBEF; }
 
+/* "i" beside a panel title toggling its explainer paragraph — the prose is
+   collapsed by default so on mobile the controls sit next to what they drive */
+.info-btn {
+  background: #000000;
+  border: 1px solid #5955E0;
+  color: #8076F1;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0;
+  text-transform: none;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+  padding: 0;
+  margin-left: 4px;
+  vertical-align: 2px;
+  cursor: pointer;
+}
+
+.info-btn:hover,
+.info-btn:focus {
+  color: #FFFFFF;
+  background: #5955E0;
+  outline: none;
+}
+
+.info-btn[aria-expanded="true"] { color: #000000; background: #65DBEF; }
+
 .legend {
   display: flex;
   flex-wrap: wrap;

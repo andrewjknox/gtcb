@@ -1,6 +1,7 @@
 /* GTCB shared nav — renders the nav bar into the <nav class="site-nav">
    placeholder on every page (single source of truth for the links), then
-   wires the mobile burger toggle + metric/imperial unit toggle.
+   wires the mobile burger toggle, metric/imperial unit toggle, and any
+   .info-btn explainer toggles present in the page's static HTML.
    Unit choice persists in localStorage ("gtcb-units"). */
 (function () {
   "use strict";
@@ -130,6 +131,24 @@
         }
       }
     });
+  }
+
+  /* ---------- info toggles ---------- */
+  /* An "i" button beside a panel title shows/hides the explainer paragraph
+     named by its aria-controls. Markup pattern (see course.html):
+       <button class="info-btn" aria-expanded="false" aria-controls="x">i</button>
+       <p id="x" hidden>…</p> */
+  var infoBtns = document.querySelectorAll(".info-btn[aria-controls]");
+  for (var ib = 0; ib < infoBtns.length; ib++) {
+    (function (btn) {
+      var text = document.getElementById(btn.getAttribute("aria-controls"));
+      if (!text) return;
+      btn.addEventListener("click", function () {
+        var open = text.hidden;
+        text.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+    })(infoBtns[ib]);
   }
 
   /* ---------- units (metric <-> imperial) ---------- */
