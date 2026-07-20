@@ -6,8 +6,30 @@
     "end": "2026-07-19T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-07-17T14:00:00Z",
+  "fetched_at": "2026-07-20T18:00:00Z",
   "activities": [
+    {
+      "id": 19371656566,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-07-19T05:51:14",
+      "distance_m": 14918,
+      "moving_time_s": 7199,
+      "elapsed_time_s": 7623,
+      "elevation_gain_m": 650,
+      "description": "⛰️ Beacon Hill (814 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19359111940,
+      "name": "Isabel Trail parkrun 💥🍒",
+      "sport_type": "Run",
+      "start_date_local": "2026-07-18T09:01:08",
+      "distance_m": 5016,
+      "moving_time_s": 1558,
+      "elapsed_time_s": 1558,
+      "elevation_gain_m": 7,
+      "description": "Ahh, the sweet sweet relief of shade under the trees."
+    },
     {
       "id": 19346122254,
       "name": "Hiking Reps",
