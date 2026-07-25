@@ -202,9 +202,6 @@ h1 {
 .hero-secondary .warn { color: #CCC35E; }
 .hero-secondary .bad { color: #DB6559; }
 
-.hero-cumulative { margin-top: 6px; color: #CCCCCC; font-size: 12px; }
-.hero-cumulative .ok { color: #3EB849; }
-.hero-cumulative .bad { color: #DB6559; }
 
 /* chunky segmented progress bar */
 .progress-bar {
