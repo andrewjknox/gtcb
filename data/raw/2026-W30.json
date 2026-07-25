@@ -1,0 +1,122 @@
+{
+  "iso_week": "2026-W30",
+  "training_week": 7,
+  "window": {
+    "start": "2026-07-20T00:00:00",
+    "end": "2026-07-26T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-07-25T12:00:00Z",
+  "activities": [
+    {
+      "id": 19456674682,
+      "name": "FM parkrun 🥪",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-25T08:42:19",
+      "distance_m": 9592,
+      "moving_time_s": 5694,
+      "elapsed_time_s": 9911,
+      "elevation_gain_m": 36,
+      "description": null
+    },
+    {
+      "id": 19442462814,
+      "name": "Hope/Edale Loop 🌄",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-07-24T05:29:10",
+      "distance_m": 25546,
+      "moving_time_s": 15176,
+      "elapsed_time_s": 15728,
+      "elevation_gain_m": 1526,
+      "description": "⛰️ Lose Hill (1,562 ft) • ⛰️ Back Tor (1,436 ft) • ⛰️ Barker Bank (1,398 ft) • ⛰️ Hollins Cross (1,273 ft) • ⛰️ Mam Tor (1,696 ft) • ⛰️ Lord's Seat (1,804 ft) • ⛰️ Broadlee Bank Tor (1,742 ft) • ⛰️ Grindslow Knoll (1,970 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19432658473,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-23T14:47:10",
+      "distance_m": 1889,
+      "moving_time_s": 1207,
+      "elapsed_time_s": 1708,
+      "elevation_gain_m": 7,
+      "description": null
+    },
+    {
+      "id": 19428635397,
+      "name": "Morning Row",
+      "sport_type": "Rowing",
+      "start_date_local": "2026-07-23T08:30:13",
+      "distance_m": 4797,
+      "moving_time_s": 1193,
+      "elapsed_time_s": 1193,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19428182999,
+      "name": "20:00 row",
+      "sport_type": "Rowing",
+      "start_date_local": "2026-07-23T08:29:00",
+      "distance_m": 4480,
+      "moving_time_s": 1200,
+      "elapsed_time_s": 1200,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19413591541,
+      "name": "Hiking Reps",
+      "sport_type": "Hike",
+      "start_date_local": "2026-07-22T05:42:29",
+      "distance_m": 10915,
+      "moving_time_s": 8101,
+      "elapsed_time_s": 8401,
+      "elevation_gain_m": 700,
+      "description": "⛰️ Mellor Moor (1,075 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19407966741,
+      "name": "RNW Alderley Trail 5",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-07-21T19:17:45",
+      "distance_m": 8515,
+      "moving_time_s": 2861,
+      "elapsed_time_s": 2861,
+      "elevation_gain_m": 81,
+      "description": "Great chat all the way round with Katie-Niamh Crawford. Calf didn't blow up 🥳 Awesome route 👌 Arrived nice n' early to try on the Salomon Aero Glide 4 GRVL, had my size! "
+    },
+    {
+      "id": 19398991063,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-07-21T08:05:44",
+      "distance_m": 0,
+      "moving_time_s": 2185,
+      "elapsed_time_s": 2185,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19394010186,
+      "name": "Back from DR",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-20T21:14:20",
+      "distance_m": 1620,
+      "moving_time_s": 1031,
+      "elapsed_time_s": 1146,
+      "elevation_gain_m": 4,
+      "description": null
+    },
+    {
+      "id": 19392493437,
+      "name": "To DR",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-20T17:39:26",
+      "distance_m": 4037,
+      "moving_time_s": 2640,
+      "elapsed_time_s": 6448,
+      "elevation_gain_m": 3,
+      "description": null
+    }
+  ]
+}

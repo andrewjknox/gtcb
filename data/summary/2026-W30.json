@@ -1,0 +1,79 @@
+{
+  "iso_week": "2026-W30",
+  "training_week": 7,
+  "phase": "Base",
+  "generated_at": "2026-07-25T19:09:10Z",
+  "window": {
+    "start": "2026-07-20T00:00:00",
+    "end": "2026-07-26T23:59:59",
+    "tz": "Europe/London"
+  },
+  "days_elapsed": 6,
+  "vert": {
+    "actual_m": 2307,
+    "target_m": 2600,
+    "prorated_target_m": 2229,
+    "pct_of_target": 89,
+    "pct_of_prorated": 103
+  },
+  "time_on_feet": {
+    "actual_s": 26138
+  },
+  "distance": {
+    "actual_m": 44976
+  },
+  "sessions": {
+    "count": 10,
+    "on_foot_count": 3
+  },
+  "daily": [
+    {
+      "date": "2026-07-20",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-07-21",
+      "vert_m": 81,
+      "time_s": 2861,
+      "distance_m": 8515
+    },
+    {
+      "date": "2026-07-22",
+      "vert_m": 700,
+      "time_s": 8101,
+      "distance_m": 10915
+    },
+    {
+      "date": "2026-07-23",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-07-24",
+      "vert_m": 1526,
+      "time_s": 15176,
+      "distance_m": 25546
+    },
+    {
+      "date": "2026-07-25",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-07-26",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    }
+  ],
+  "flags": [
+    {
+      "type": "calf",
+      "detail": "\"Calf didn't blow up 🥳 Awesome route 👌 Arrived nice n' early to try on the Salomon Aero Glide 4 GRVL, had my size!\" — \"RNW Alderley Trail 5\", 2026-07-21"
+    }
+  ]
+}
