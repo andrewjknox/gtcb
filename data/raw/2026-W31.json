@@ -1,0 +1,100 @@
+{
+  "iso_week": "2026-W31",
+  "training_week": 8,
+  "window": {
+    "start": "2026-07-27T00:00:00",
+    "end": "2026-08-02T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-08-01T23:45:00Z",
+  "activities": [
+    {
+      "id": 19552072738,
+      "name": "York parkrun 💥🍒",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-01T09:02:04",
+      "distance_m": 5050,
+      "moving_time_s": 1753,
+      "elapsed_time_s": 1753,
+      "elevation_gain_m": 4.4,
+      "description": null
+    },
+    {
+      "id": 19545167080,
+      "name": "York Mooch",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-31T12:40:13",
+      "distance_m": 18409,
+      "moving_time_s": 9691,
+      "elapsed_time_s": 19641,
+      "elevation_gain_m": 47,
+      "description": "Cathedrals, city walls, tap rooms and running stores 👌"
+    },
+    {
+      "id": 19533449582,
+      "name": "Sale Sizzler Support + 🍺",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-30T18:39:04",
+      "distance_m": 6173,
+      "moving_time_s": 3646,
+      "elapsed_time_s": 6191,
+      "elevation_gain_m": 15,
+      "description": "Too many photos to put in here, finish the rest later 😅"
+    },
+    {
+      "id": 19525115095,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-07-30T06:59:00",
+      "distance_m": 12231,
+      "moving_time_s": 5312,
+      "elapsed_time_s": 5368,
+      "elevation_gain_m": 394,
+      "description": "⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19517279476,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-29T14:34:05",
+      "distance_m": 2381,
+      "moving_time_s": 1765,
+      "elapsed_time_s": 10794,
+      "elevation_gain_m": 22,
+      "description": null
+    },
+    {
+      "id": 19490953325,
+      "name": "Night Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-27T21:13:29",
+      "distance_m": 1608,
+      "moving_time_s": 1114,
+      "elapsed_time_s": 1728,
+      "elevation_gain_m": 6,
+      "description": null
+    },
+    {
+      "id": 19489433723,
+      "name": "Club Run: 10mm",
+      "sport_type": "Run",
+      "start_date_local": "2026-07-27T18:36:11",
+      "distance_m": 6611,
+      "moving_time_s": 2674,
+      "elapsed_time_s": 3135,
+      "elevation_gain_m": 22,
+      "description": "Late. Ran there 😅"
+    },
+    {
+      "id": 19484419060,
+      "name": "Morning Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-07-27T10:04:32",
+      "distance_m": 4793,
+      "moving_time_s": 3636,
+      "elapsed_time_s": 10552,
+      "elevation_gain_m": 23,
+      "description": null
+    }
+  ]
+}
