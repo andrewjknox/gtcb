@@ -1,0 +1,34 @@
+{
+  "iso_week": "2026-W32",
+  "training_week": 9,
+  "window": {
+    "start": "2026-08-03T00:00:00",
+    "end": "2026-08-09T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-08-03T18:30:00Z",
+  "activities": [
+    {
+      "id": 19580676971,
+      "name": "Treadmill Elevation #2",
+      "sport_type": "Hike",
+      "start_date_local": "2026-08-03T09:30:00",
+      "distance_m": 1,
+      "moving_time_s": 3601,
+      "elapsed_time_s": 3601,
+      "elevation_gain_m": 705,
+      "description": "Elevation log"
+    },
+    {
+      "id": 19580054562,
+      "name": "Treadmill",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-03T09:24:08",
+      "distance_m": 5133,
+      "moving_time_s": 4076,
+      "elapsed_time_s": 4076,
+      "elevation_gain_m": 0,
+      "description": null
+    }
+  ]
+}
