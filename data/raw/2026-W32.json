@@ -6,8 +6,140 @@
     "end": "2026-08-09T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-08-03T18:30:00Z",
+  "fetched_at": "2026-08-09T23:59:59Z",
   "activities": [
+    {
+      "id": 19663802158,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-08-09T07:00:21",
+      "distance_m": 13607,
+      "moving_time_s": 5643,
+      "elapsed_time_s": 5835,
+      "elevation_gain_m": 418,
+      "description": "⛰️ Sponds Hill (1,355 ft) • ⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19651114026,
+      "name": "Queen's parkrun 💥🍒",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-08T09:34:41",
+      "distance_m": 5005,
+      "moving_time_s": 1548,
+      "elapsed_time_s": 1553,
+      "elevation_gain_m": 41,
+      "description": "Bumped into Damien! Who took the win for Didsbury Runners (even with two wrong turns). Had planned on doing Citypark with Dale Irwin but he's off galavanting in Albir 🇪🇸😂"
+    },
+    {
+      "id": 19641860176,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-07T14:02:59",
+      "distance_m": 8565,
+      "moving_time_s": 5653,
+      "elapsed_time_s": 6479,
+      "elevation_gain_m": 71,
+      "description": null
+    },
+    {
+      "id": 19623188191,
+      "name": "20:00 row",
+      "sport_type": "Rowing",
+      "start_date_local": "2026-08-06T08:37:00",
+      "distance_m": 4512,
+      "moving_time_s": 1200,
+      "elapsed_time_s": 1200,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19624616693,
+      "name": "Morning Row",
+      "sport_type": "Rowing",
+      "start_date_local": "2026-08-06T08:36:37",
+      "distance_m": 5010,
+      "moving_time_s": 1206,
+      "elapsed_time_s": 1206,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19618440837,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-05T17:32:36",
+      "distance_m": 7284,
+      "moving_time_s": 5524,
+      "elapsed_time_s": 16469,
+      "elevation_gain_m": 31,
+      "description": null
+    },
+    {
+      "id": 19608628970,
+      "name": "20:00 row",
+      "sport_type": "Rowing",
+      "start_date_local": "2026-08-05T08:31:00",
+      "distance_m": 4506.1,
+      "moving_time_s": 1200,
+      "elapsed_time_s": 1200,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19604040313,
+      "name": "Night Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-04T22:34:17",
+      "distance_m": 2360,
+      "moving_time_s": 1417,
+      "elapsed_time_s": 1451,
+      "elevation_gain_m": 0,
+      "description": "Back from DR trail run planning session"
+    },
+    {
+      "id": 19601209260,
+      "name": "Treadmill Elevation #3",
+      "sport_type": "Hike",
+      "start_date_local": "2026-08-04T18:00:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 780,
+      "description": null
+    },
+    {
+      "id": 19600858986,
+      "name": "Treadmill ↗️",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-04T17:23:58",
+      "distance_m": 5729,
+      "moving_time_s": 4161,
+      "elapsed_time_s": 4161,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19586805132,
+      "name": "Club Run: 10mm",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-08-03T18:53:44",
+      "distance_m": 5513,
+      "moving_time_s": 2141,
+      "elapsed_time_s": 2319,
+      "elevation_gain_m": 9,
+      "description": null
+    },
+    {
+      "id": 19586804846,
+      "name": "To DR",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-03T18:34:48",
+      "distance_m": 1468,
+      "moving_time_s": 493,
+      "elapsed_time_s": 532,
+      "elevation_gain_m": 4,
+      "description": null
+    },
     {
       "id": 19580676971,
       "name": "Treadmill Elevation #2",
