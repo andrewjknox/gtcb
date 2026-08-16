@@ -1,0 +1,122 @@
+{
+  "iso_week": "2026-W33",
+  "training_week": 10,
+  "window": {
+    "start": "2026-08-10T00:00:00",
+    "end": "2026-08-16T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-08-16T23:30:00Z",
+  "activities": [
+    {
+      "id": 19678085810,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-08-10T09:11:20",
+      "distance_m": 0,
+      "moving_time_s": 2541,
+      "elapsed_time_s": 2541,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19684534572,
+      "name": "Evening Run",
+      "sport_type": "Run",
+      "start_date_local": "2026-08-10T18:32:44",
+      "distance_m": 1587,
+      "moving_time_s": 564,
+      "elapsed_time_s": 997,
+      "elevation_gain_m": 3,
+      "description": null
+    },
+    {
+      "id": 19685280700,
+      "name": "Club Run: 9:30mm Tail",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-08-10T18:54:25",
+      "distance_m": 5613,
+      "moving_time_s": 2003,
+      "elapsed_time_s": 2018,
+      "elevation_gain_m": 35,
+      "description": null
+    },
+    {
+      "id": 19686826530,
+      "name": "Night Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-10T21:38:03",
+      "distance_m": 1571,
+      "moving_time_s": 1012,
+      "elapsed_time_s": 1012,
+      "elevation_gain_m": 6,
+      "description": null
+    },
+    {
+      "id": 19706427960,
+      "name": "Morning Trail Run 🌄",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-08-12T05:53:52",
+      "distance_m": 13676,
+      "moving_time_s": 5546,
+      "elapsed_time_s": 5637,
+      "elevation_gain_m": 419,
+      "description": "⛰️ Sponds Hill (1,355 ft) • ⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19707177004,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-08-12T08:12:36",
+      "distance_m": 0,
+      "moving_time_s": 2223,
+      "elapsed_time_s": 2223,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19714978820,
+      "name": "Evening Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-12T18:28:57",
+      "distance_m": 1233,
+      "moving_time_s": 972,
+      "elapsed_time_s": 3253,
+      "elevation_gain_m": 19,
+      "description": null
+    },
+    {
+      "id": 19752516455,
+      "name": "Lakeland 4 Passes: Day 1 ⛺",
+      "sport_type": "Hike",
+      "start_date_local": "2026-08-14T07:46:35",
+      "distance_m": 15982,
+      "moving_time_s": 15127,
+      "elapsed_time_s": 31789,
+      "elevation_gain_m": 1326,
+      "description": "Tacked on the Pike last minute. Camped in Ennerdale ⛰️ Broad Crag Col (2,881 ft) • ⛰️ Scafell Pike (3,209 ft) • ⛰️ Mickledore (2,723 ft) • ⛰️ Black Sail Pass (1,788 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19751302690,
+      "name": "Lakeland 4 Passes: Day 2",
+      "sport_type": "Hike",
+      "start_date_local": "2026-08-15T08:21:35",
+      "distance_m": 12488,
+      "moving_time_s": 11726,
+      "elapsed_time_s": 15744,
+      "elevation_gain_m": 841,
+      "description": "⛰️ Scarth Gap (1,460 ft) • ⛰️ Honister Pass (1,168 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 19767915554,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-16T15:02:19",
+      "distance_m": 2978,
+      "moving_time_s": 1963,
+      "elapsed_time_s": 2304,
+      "elevation_gain_m": 4,
+      "description": null
+    }
+  ]
+}
