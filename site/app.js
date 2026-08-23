@@ -102,7 +102,11 @@ function statusClass(pct) {
 
 /* ---------- data loading (relative fetch, index-driven) ---------- */
 async function fetchJSON(url) {
-  const res = await fetch(url);
+  /* "no-cache" forces revalidation with the server (conditional request ->
+     fast 304 via ETag/Last-Modified) so an open tab never serves a stale
+     disk-cache copy of the JSON. Not "no-store": the cache is still used
+     when the server confirms it is current. */
+  const res = await fetch(url, { cache: "no-cache" });
   if (!res.ok) throw new Error(url + " -> HTTP " + res.status);
   return res.json();
 }
