@@ -276,8 +276,11 @@
     var model = D && D.paceModel;
     if (!model || !predBtn) return;
 
-    /* readiness: vert attainment over the last N completed training weeks,
-       mapped to a speed factor (floor + span * attainment, capped at 1) */
+    /* readiness: vert over the last N completed training weeks vs the
+       baseline weekly vert of the block that preceded the 2022 46K record,
+       mapped to a speed factor (floor + span * attainment, clamped to
+       [floor, cap]). Without a baseline it falls back to legacy %-of-plan
+       attainment (clamped 0..1, so the factor never exceeds 1). */
     var att = 1, attLabel = "no completed training weeks yet — assuming on plan";
     (function () {
       var weeks = (D.index && D.index.weeks) || [];
@@ -290,11 +293,18 @@
       if (!done.length) return;
       var act = 0, tgt = 0;
       for (var j = 0; j < done.length; j++) { act += done[j].vert.actual_m; tgt += done[j].vert.target_m; }
-      att = Math.max(0, Math.min(1, act / tgt));
-      attLabel = done[0].iso_week.slice(5) + "–" + done[done.length - 1].iso_week.slice(5) +
-        " vert " + Math.round((act / tgt) * 100) + "% of plan";
+      var range = done[0].iso_week.slice(5) + "–" + done[done.length - 1].iso_week.slice(5);
+      var base = model.readiness.baseline;
+      if (base && base.vert_m_per_week > 0) {
+        att = Math.max(0, act / (base.vert_m_per_week * done.length));
+        attLabel = range + " vert " + Math.round(att * 100) + "% of the 46K build";
+      } else {
+        att = Math.max(0, Math.min(1, act / tgt));
+        attLabel = range + " vert " + Math.round((act / tgt) * 100) + "% of plan";
+      }
     })();
-    var speedFactor = model.readiness.floor + model.readiness.span * att;
+    var speedFactor = Math.min(model.readiness.cap || 1,
+      Math.max(model.readiness.floor, model.readiness.floor + model.readiness.span * att));
 
     var curve = model.curve;
     /* beyond the end bins speed extends at constant vertical rate — on very
@@ -354,7 +364,7 @@
         "same mountains) walked over the 102K, with the 46K's aid-stop ratio, +" +
         Math.round((model.fade - 1) * 100) + "% ultra fade for double the equivalent distance, +" +
         Math.round((model.night.mult - 1) * 100) + "% in darkness, × " +
-        Math.round(speedFactor * 100) + "% readiness from training (" + attLabel + "). " +
+        Math.round(speedFactor * 100) + "% readiness — recent training vs the build into that 46K (" + attLabel + "). " +
         "Arrivals are absolute — the target slider is bypassed while this is on.";
     }
   })();

@@ -84,6 +84,27 @@
   "readiness": {
     "weeks": 4,
     "floor": 0.9,
-    "span": 0.1
+    "span": 0.1,
+    "cap": 1.05,
+    "baseline": {
+      "vert_m_per_week": 673.3,
+      "window": {
+        "start": "2022-10-17",
+        "end": "2022-11-13"
+      },
+      "weekly_vert_m": [
+        378,
+        1037,
+        1139,
+        139
+      ],
+      "on_foot_types": [
+        "Run",
+        "TrailRun",
+        "VirtualRun",
+        "Hike"
+      ],
+      "source": "data/refs/strava-2022-preblock.json"
+    }
   }
 }
