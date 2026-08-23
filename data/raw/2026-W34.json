@@ -6,7 +6,7 @@
     "end": "2026-08-23T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-08-23T23:59:59Z",
+  "fetched_at": "2026-08-23T23:30:00",
   "activities": [
     {
       "id": 19861805272,
@@ -28,7 +28,7 @@
       "moving_time_s": 1296,
       "elapsed_time_s": 1296,
       "elevation_gain_m": 0,
-      "description": null
+      "description": "1213 feet ↗️"
     },
     {
       "id": 19862751970,
@@ -39,7 +39,7 @@
       "moving_time_s": 1,
       "elapsed_time_s": 1,
       "elevation_gain_m": 1308.5,
-      "description": "From treadmill & stairmaster"
+      "description": "From treadmill & stairmaster "
     },
     {
       "id": 19860497946,
