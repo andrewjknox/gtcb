@@ -40,10 +40,17 @@ predicted time drifts week by week as training lands (or doesn't).
 5. **Night** — ×1.05 while the race clock is in darkness (mid-Nov Alicante:
    sunrise 07:45, sunset 17:45; the 23:00 Friday start means ~8¾ h dark
    before first light).
-6. **Readiness** — vert attainment over the last 4 *completed* training
-   weeks (`days_elapsed ≥ 7`), Σactual/Σtarget clamped to [0,1], mapped to a
-   speed factor 0.90 + 0.10 × attainment. All knobs live in
-   `pace-model.json`, not code.
+6. **Readiness** — vert over the last 4 *completed* training weeks
+   (`days_elapsed ≥ 7`) measured against the 2022 pre-race build: attainment
+   = Σactual ÷ (baseline vert-per-week × 4), where the baseline (673.3 m/wk)
+   is the mean weekly on-foot vert (Run/TrailRun/VirtualRun/Hike, Walk
+   excluded) over the final 4 weeks before CB Trails 46K race week
+   (2022-10-17 → 2022-11-13, from `data/refs/strava-2022-preblock.json`).
+   Speed factor = min(cap, 0.90 + 0.10 × attainment), cap 1.05 — so
+   out-building the 2022 block can push the prediction slightly faster, but
+   never more than +5 %. All knobs live in `pace-model.json`, not code
+   (`fit-grade-curve.mjs` falls back to the old %-of-plan-target block if
+   the preblock reference is missing).
 
 At launch (W29, attainment 88%) it predicts ≈ 22:17 — under the 24 h limit
 but **missing the Benimantell cut-off (ctrl 5) by ~half an hour**: per the
@@ -53,8 +60,8 @@ point of the per-control walk.
 ## Known limits
 
 - The 46K is from Nov 2022 — a course-difficulty anchor, not current
-  fitness; readiness carries the "current you" part and maxes out at parity
-  with 2022 race shape.
+  fitness; readiness carries the "current you" part, anchored to the 2022
+  pre-race build and capped at +5 % beyond parity with it.
 - It includes the ~1.5 mi wrong-turn detour (slightly conservative anchor).
 - Steep-grade bins (>20 %) are extrapolated, not measured — sparse samples.
 - Nothing models sleep deprivation, weather, or aid-station strategy;

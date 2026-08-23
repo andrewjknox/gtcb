@@ -14,8 +14,17 @@
 //                        ~79 eq-km): 2.08^0.08 ≈ 1.06
 //   night                slowdown while the race clock is in darkness
 //                        (mid-Nov Alicante: sunrise ~07:45, sunset ~17:45)
-//   readiness            maps recent training vert attainment (0..1) to a
-//                        speed factor: floor + span * attainment
+//   readiness            maps recent training vert attainment to a speed
+//                        factor: min(cap, floor + span * attainment). When
+//                        data/refs/strava-2022-preblock.json is present,
+//                        attainment = current-4-week vert / (2022 baseline
+//                        vert-per-week * weeks) — the mean weekly on-foot
+//                        vert (Run/TrailRun/VirtualRun/Hike; Walk excluded,
+//                        matching summary.mjs) over the last 4 weeks before
+//                        the CB Trails 46K — so exceeding the 2022 build can
+//                        push the prediction slightly faster, capped at +5%.
+//                        Without the preblock file, the legacy block is kept
+//                        (attainment = % of plan target, no cap/baseline).
 
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -109,6 +118,52 @@ for (const c of chunks) { predT += c.ds / speedAt(c.g); actT += c.dt; }
 const calib = predT / actT; // >1 means the curve runs slow; scale speeds up
 curve = curve.map((p) => ({ g: p.g, v: +(p.v * calib).toFixed(4), n: p.n }));
 
+// ---- readiness: anchor attainment to the 2022 pre-race training block ----
+// Mean weekly on-foot vert over the last 4 Mon-Sun weeks before CB Trails
+// 46K race week. Legacy plan-target semantics kept if the reference is absent.
+const PREBLOCK = "data/refs/strava-2022-preblock.json";
+const ON_FOOT = ["Run", "TrailRun", "VirtualRun", "Hike"];
+const BASE_START = "2022-10-17", BASE_END = "2022-11-13", BASE_WEEKS = 4;
+let readiness = { weeks: 4, floor: 0.9, span: 0.1 };
+let preblock = null;
+try {
+  preblock = JSON.parse(readFileSync(PREBLOCK, "utf8"));
+} catch {
+  // reference not fetched — keep legacy readiness
+}
+if (preblock) {
+  // Mon-Sun week key from the local date part (strings are local wall-clock).
+  const weekOf = (date) => {
+    const d = new Date(date + "T00:00:00Z");
+    d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); // back to Monday
+    return d.toISOString().slice(0, 10);
+  };
+  const byWeek = new Map();
+  for (const a of preblock.activities) {
+    if (!ON_FOOT.includes(a.sport_type)) continue;
+    const w = weekOf(a.start_date_local.slice(0, 10));
+    byWeek.set(w, (byWeek.get(w) || 0) + (a.elevation_gain_m || 0));
+  }
+  const weeklyVert = [...byWeek.entries()]
+    .filter(([w]) => w >= BASE_START && w <= BASE_END)
+    .sort(([a], [b]) => (a < b ? -1 : 1))
+    .map(([, v]) => v);
+  const mean = weeklyVert.reduce((s, v) => s + v, 0) / BASE_WEEKS;
+  readiness = {
+    weeks: BASE_WEEKS,
+    floor: 0.9,
+    span: 0.1,
+    cap: 1.05,
+    baseline: {
+      vert_m_per_week: Math.round(mean * 10) / 10,
+      window: { start: BASE_START, end: BASE_END },
+      weekly_vert_m: weeklyVert,
+      on_foot_types: ON_FOOT,
+      source: PREBLOCK,
+    },
+  };
+}
+
 const model = {
   generated_by: "scripts/build/fit-grade-curve.mjs",
   source: {
@@ -122,7 +177,7 @@ const model = {
   stop_ratio: +(ref.source.elapsed_time_s / ref.source.moving_time_s).toFixed(4),
   fade: 1.06,
   night: { mult: 1.05, sunrise_min: 465, sunset_min: 1065 },
-  readiness: { weeks: 4, floor: 0.9, span: 0.1 },
+  readiness,
 };
 
 writeFileSync(OUT, JSON.stringify(model, null, 2) + "\n");
