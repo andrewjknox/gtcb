@@ -9,8 +9,15 @@
 // CLI use:      node scripts/build/summary.mjs 2026-W29   (from repo root)
 //
 // Flags emitted (deterministic):
-//   calf    — any activity whose description or name mentions "calf"
-//             (left-calf rehab is active; CLAUDE.md requires these surfaced)
+//   calf    — any activity whose description or name mentions "calf".
+//             Left-calf rehab resolved (~Aug 2026), but the tripwire stays as
+//             a precaution: it costs nothing when there is nothing to report.
+//   injury  — any activity mentioning the current active-watch body parts
+//             (quad/knee/cramp/adductor/groin/hamstring/IT band/patella/
+//             tendon). Generic on purpose so the watch can move without a
+//             schema change — add terms to INJURY_RE as it does. Current
+//             primary watch (owner 2026-08-23): right distal quad, above the
+//             knee, descent-specific; adductor cramp. See CLAUDE.md.
 //   missed_session — not emitted: plan.json has no per-session schedule to
 //             compare against, so there is nothing deterministic to compute
 //   (Walk activities are never flagged: labels are trusted as-is, owner
@@ -32,17 +39,39 @@ function daysElapsed(windowStart, nowKey) {
   return Math.min(7, Math.max(1, days));
 }
 
-function calfFlags(activities) {
+// Injury-surveillance keyword sets. `calf` is kept as a standalone type for
+// continuity with existing summaries; everything else surfaces under the
+// generic `injury` type so the watch can move body-to-body without a schema
+// change. Word-boundary anchored so "calf"/"knee" don't match inside words.
+const WATCHES = [
+  { type: "calf", re: /\bcalf\b/i },
+  {
+    type: "injury",
+    re: /\b(quad|knee|cramp|adductor|groin|hamstring|it[\s-]?band|patella|patellar|tendon|tendin\w*)\b/i,
+  },
+];
+
+function surveil(a, re, type) {
+  const date = typeof a.start_date_local === "string" ? a.start_date_local.slice(0, 10) : "?";
+  const desc = typeof a.description === "string" ? a.description : "";
+  const name = typeof a.name === "string" ? a.name : "";
+  if (re.test(desc)) {
+    const sentence =
+      desc.split(/(?<=[.!?…])\s+/).find((s) => re.test(s))?.trim() ?? desc.trim();
+    return { type, detail: `"${sentence}" — "${name}", ${date}` };
+  }
+  if (re.test(name)) {
+    return { type, detail: `Activity name flags ${type}: "${name}", ${date}` };
+  }
+  return null;
+}
+
+function injuryFlags(activities) {
   const flags = [];
   for (const a of activities) {
-    const date = typeof a.start_date_local === "string" ? a.start_date_local.slice(0, 10) : "?";
-    const desc = typeof a.description === "string" ? a.description : "";
-    if (/calf/i.test(desc)) {
-      const sentence =
-        desc.split(/(?<=[.!?…])\s+/).find((s) => /calf/i.test(s))?.trim() ?? desc.trim();
-      flags.push({ type: "calf", detail: `"${sentence}" — "${a.name}", ${date}` });
-    } else if (/calf/i.test(a.name ?? "")) {
-      flags.push({ type: "calf", detail: `Activity name mentions calf: "${a.name}", ${date}` });
+    for (const { type, re } of WATCHES) {
+      const flag = surveil(a, re, type);
+      if (flag) flags.push(flag);
     }
   }
   return flags;
@@ -84,7 +113,7 @@ export function buildSummary(raw, plan, opts = {}) {
     distance: { actual_m: rec.distance_m },
     sessions: { count: rec.sessions_count, on_foot_count: rec.on_foot_count },
     daily: rec.daily,
-    flags: calfFlags(activities),
+    flags: injuryFlags(activities),
   };
 }
 

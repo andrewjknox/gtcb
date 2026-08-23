@@ -403,6 +403,12 @@ tr.current td { color: #FFFFFF; font-weight: bold; }
 .flag.calf .flag-type { background: #DB6559; }
 .flag.calf .flag-detail { color: #FF897D; }
 
+/* injury — current active watch (right distal quad / descent, adductor).
+   Brightest red so the live concern reads louder than the calf precaution. */
+.flag.injury { border-color: #DB6559; }
+.flag.injury .flag-type { background: #FF897D; color: #000000; }
+.flag.injury .flag-detail { color: #FF897D; }
+
 .flag.missed_session .flag-type { background: #CCC35E; color: #000000; }
 .flag.anomaly .flag-type { background: #B766B5; }
 

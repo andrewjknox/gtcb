@@ -46,7 +46,7 @@ Static dashboard (HTML/JS/Canvas + JSON, no framework) tracking a 23-week ultra 
 - All dates Europe/London; week = Mon 00:00 → Sun 23:59:59.
 - Data files are named by ISO week (`2026-W28.json`).
 - On-foot sport types: Run, TrailRun, VirtualRun, Hike. (Walk excluded — running + hiking only, owner decision 2026-07-13. Walk labels are trusted as-is: never flag or second-guess a `Walk` as a possible mislabelled hike/run — owner decision 2026-07-16.)
-- Left-calf rehab is active — activity descriptions mentioning calf issues must be surfaced as flags.
+- Injury surveillance: activity names/descriptions mentioning an active-watch body part must be surfaced as flags. Left-calf rehab resolved (~Aug 2026); `calf` mentions are still surfaced as a precaution (own type, kept for continuity). Current primary watch (owner 2026-08-23): right distal quad, above the knee, descent-specific (ascent fine) — physio from 2026-08-24 — plus adductor (cramped on the final descent rep at Kinder Low). Quad/knee/cramp/adductor and other body parts surface under the generic `injury` type; move the watch by editing `INJURY_RE`/`WATCHES` in `scripts/build/summary.mjs`, no schema change needed.
 
 ## Data shapes
 
@@ -77,7 +77,7 @@ Static dashboard (HTML/JS/Canvas + JSON, no framework) tracking a 23-week ultra 
   "distance": { "actual_m": 0 },
   "sessions": { "count": 0, "on_foot_count": 0 },
   "daily": [ { "date": "2026-07-06", "vert_m": 0, "time_s": 0, "distance_m": 0 } ],
-  "flags": [ { "type": "missed_session|calf|anomaly", "detail": "" } ]
+  "flags": [ { "type": "missed_session|calf|injury|anomaly", "detail": "" } ]
 }
 ```
 
@@ -97,7 +97,7 @@ Plus `data/reports/index.json`: `{ "weeks": ["2026-W24", "..."] }` — same mani
 
 ## Pipeline & gates
 
-**Routine refresh (default — data changed, site code did not):** spawn `data-agent` (haiku) to fetch the week's raw Strava JSON, then run `node scripts/refresh.mjs [iso-week]` from the main thread and commit. The script chains Gate A → `scripts/build/summary.mjs` (deterministic analyst: same math as `scripts/reconcile.mjs`, plus calf flags) → Gate B → copy `data/` → `site/data/` → `inline-data.mjs` → `minify.mjs` → Gate C, and blocks on any failure. No analyst/builder/reviewer agents are spawned — their routine work is deterministic, and an LLM run of it just gets re-verified by these same scripts (path added 2026-07-16 to cut refresh token cost). Gate C's diff-scope check requires a tree where only `site/` + `data/` change: commit any dev work first. Running deterministic scripts is orchestration, not analysis — invariant 1 is satisfied.
+**Routine refresh (default — data changed, site code did not):** spawn `data-agent` (haiku) to fetch the week's raw Strava JSON, then run `node scripts/refresh.mjs [iso-week]` from the main thread and commit. The script chains Gate A → `scripts/build/summary.mjs` (deterministic analyst: same math as `scripts/reconcile.mjs`, plus injury/calf flags) → Gate B → copy `data/` → `site/data/` → `inline-data.mjs` → `minify.mjs` → Gate C, and blocks on any failure. No analyst/builder/reviewer agents are spawned — their routine work is deterministic, and an LLM run of it just gets re-verified by these same scripts (path added 2026-07-16 to cut refresh token cost). Gate C's diff-scope check requires a tree where only `site/` + `data/` change: commit any dev work first. Running deterministic scripts is orchestration, not analysis — invariant 1 is satisfied.
 
 **Weekly report (on demand — owner asks for last week's debrief, usually Sun/Mon night once the week's vert+ToF is done):** spawn `data-agent` to (re)fetch the completed week's raw JSON (Gate A fires on stop), run `node scripts/refresh.mjs <iso-week>` to finalize the summary (`days_elapsed` caps at 7; Gate B enforces 7 for past weeks), then spawn `report-agent` (writes `data/reports/<week>.json` + its index — **Gate R** validates schema, completed-week-only, word bounds, index consistency on stop), then run `node scripts/report.mjs <iso-week>` (re-normalizes the index → Gate R → copy → `inline-data.mjs` → `minify.mjs` → Gate C). One commit: `report: 2026-W28`. Routine refreshes stay report-free; they only carry existing reports through the copy/inline steps. The debrief UI is `site/debrief.js` (modal on plan.html; week-number cells become buttons for weeks present in `GTCB_DATA.reports`).
 
