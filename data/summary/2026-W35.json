@@ -2,29 +2,29 @@
   "iso_week": "2026-W35",
   "training_week": 12,
   "phase": "Build",
-  "generated_at": "2026-08-26T08:15:24Z",
+  "generated_at": "2026-08-28T11:54:02Z",
   "window": {
     "start": "2026-08-24T00:00:00",
     "end": "2026-08-30T23:59:59",
     "tz": "Europe/London"
   },
-  "days_elapsed": 3,
+  "days_elapsed": 5,
   "vert": {
-    "actual_m": 890.1,
+    "actual_m": 1640,
     "target_m": 1400,
-    "prorated_target_m": 600,
-    "pct_of_target": 64,
-    "pct_of_prorated": 148
+    "prorated_target_m": 1000,
+    "pct_of_target": 117,
+    "pct_of_prorated": 164
   },
   "time_on_feet": {
-    "actual_s": 5987
+    "actual_s": 13059
   },
   "distance": {
-    "actual_m": 12454.0934
+    "actual_m": 24951.1868
   },
   "sessions": {
-    "count": 6,
-    "on_foot_count": 3
+    "count": 12,
+    "on_foot_count": 6
   },
   "daily": [
     {
@@ -47,15 +47,15 @@
     },
     {
       "date": "2026-08-27",
-      "vert_m": 0,
-      "time_s": 0,
-      "distance_m": 0
+      "vert_m": 33,
+      "time_s": 4345,
+      "distance_m": 12456
     },
     {
       "date": "2026-08-28",
-      "vert_m": 0,
-      "time_s": 0,
-      "distance_m": 0
+      "vert_m": 716.9,
+      "time_s": 2727,
+      "distance_m": 41.0934
     },
     {
       "date": "2026-08-29",
