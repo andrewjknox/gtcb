@@ -431,16 +431,8 @@ function drawBuildChart(state) {
         ctx.strokeRect(Math.round(x) + 0.5, yT, barW - 1, Math.round(yOf(0)) - yT);
       }
 
-      // current week: pro-rated pace tick (target × days elapsed / 7) + white marker
+      // current week: white marker
       if (isCur && s && tof !== null) {
-        const paceS = tof * 3600 * num(s.days_elapsed) / 7;
-        const yP = Math.round(yOf(paceS / 3600)) + 0.5;
-        ctx.strokeStyle = C.cyan;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(x - 3, yP);
-        ctx.lineTo(x + barW + 3, yP);
-        ctx.stroke();
         ctx.lineWidth = 1;
         ctx.fillStyle = C.white;
         ctx.textAlign = "center";
@@ -453,7 +445,7 @@ function drawBuildChart(state) {
         text += "\nTOF " + fmtHM(actualS) + (tof !== null ? " / " + fmtTofTarget(tof) : "");
         if (isCur && tof !== null) {
           const paceS = tof * 3600 * num(s.days_elapsed) / 7;
-          text += "\nIN PROGRESS · PACE LINE " + fmtHM(paceS) + " h:mm";
+          text += "\nIN PROGRESS · PACE " + fmtHM(paceS) + " h:mm";
         }
       } else if (tof !== null) {
         text += "\nTARGET " + fmtTofTarget(tof) + " · NO DATA YET";
@@ -477,15 +469,8 @@ function drawBuildChart(state) {
       const yT = Math.round(yOf(vertVal(target))) + 0.5;
       ctx.strokeRect(Math.round(x) + 0.5, yT, barW - 1, Math.round(yOf(0)) - yT);
 
-      // current week: pro-rated pace tick in cyan + white marker above
+      // current week: white marker above
       if (isCur && s && s.vert) {
-        const yP = Math.round(yOf(vertVal(s.vert.prorated_target_m))) + 0.5;
-        ctx.strokeStyle = C.cyan;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(x - 3, yP);
-        ctx.lineTo(x + barW + 3, yP);
-        ctx.stroke();
         ctx.lineWidth = 1;
         ctx.fillStyle = C.white;
         ctx.textAlign = "center";
@@ -497,7 +482,7 @@ function drawBuildChart(state) {
       if (actual !== null) {
         const pct = s.vert ? num(s.vert.pct_of_target) : 0;
         text += "\nVERT " + fmtVert(actual) + " / " + fmtVert(target) + " " + vertUnit() + " (" + pct + "%)";
-        if (isCur) text += "\nIN PROGRESS · PACE LINE " + fmtVert(s.vert.prorated_target_m) + " " + vertUnit();
+        if (isCur) text += "\nIN PROGRESS · PACE " + fmtVert(s.vert.prorated_target_m) + " " + vertUnit();
       } else {
         text += "\nTARGET " + fmtVert(target) + " " + vertUnit() + " · NO DATA YET";
       }

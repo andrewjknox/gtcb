@@ -1,0 +1,46 @@
+{
+  "verdict": "pass",
+  "checks": [
+    {
+      "invariant": "1",
+      "result": "pass",
+      "detail": "File-level audit only; the reviewed diff is confined to site/app.js and the regenerated site/app.min.js (canvas drawing + tooltip text), with no evidence of analysis or edits performed by an orchestrator thread."
+    },
+    {
+      "invariant": "2",
+      "result": "pass",
+      "detail": "Change touches only site/app.js (chart rendering) and its minified build output; no data/ files were modified. No Strava reads or HTML writes introduced."
+    },
+    {
+      "invariant": "3",
+      "result": "pass",
+      "detail": "site/app.js palette object still matches CLAUDE.md's 15 TMS9918 hex values exactly. drawBuildChart after the edit only draws with C.black, C.dkBlue, C.ltBlue, C.white, C.gray and PHASE_COLORS[...] — no new/foreign colors introduced by removing the cyan pace-line tick; C.cyan remains defined and is still used elsewhere (predicted-time chart), so it isn't a dangling unused constant. No stray '.pace-line'/'PACE LINE' CSS class or legend swatch left behind. Sub-invariant 3b: site/app.min.js matches site/app.js's post-edit logic and wording exactly — no leftover 'PACE LINE' text or cyan draw calls in the minified output, and index.html loads app.min.js. Sub-invariant 3c: site/data.js was not touched by this change and index.html still loads data.js before app.min.js."
+    },
+    {
+      "invariant": "3a",
+      "result": "pass",
+      "detail": "Grep for href=\"/ and src=\"/ across site/ returned no matches; index.html and app.js continue to use relative paths."
+    },
+    {
+      "invariant": "4",
+      "result": "pass",
+      "detail": "Not touched by this change — drawBuildChart contains no date/window logic (it consumes days_elapsed and window fields already computed upstream); Europe/London week-boundary logic lives elsewhere and is unaffected."
+    },
+    {
+      "invariant": "5",
+      "result": "pass",
+      "detail": "data/plan.json unmodified by this change and still hand-maintained/read-only; W12 (2026-W35) entry still carries tof_target_h 4, vert_target_m 1400, notes recovery, focus Deload — no agent wrote to it."
+    },
+    {
+      "invariant": "6",
+      "result": "pass",
+      "detail": "No secrets present in the reviewed diff — pure canvas-drawing and string-literal changes in site/app.js/app.min.js."
+    },
+    {
+      "invariant": "7",
+      "result": "pass",
+      "detail": "Change committed by the orchestrator with a conventional message after this verdict was recorded."
+    }
+  ],
+  "reasons": []
+}
