@@ -1206,13 +1206,13 @@ tr.current-week td:first-child {
 
 .planner-table { min-width: 640px; }
 
-.planner-table tr.hard td { color: #FFFFFF; }
-
-/* buffer tiers — one definition serves the planner cells and the legend */
-.buf-ok { color: #3EB849; font-weight: bold; }
-.buf-tight { color: #CCC35E; font-weight: bold; }
-.buf-bad { color: #FF897D; font-weight: bold; }
-.buf-neg { color: #DB6559; font-weight: bold; }
+/* buffer tiers — one definition serves the planner cells and the legend.
+   Buffers only exist on cut-off rows, so each tier must also outrank the
+   white .hard rule above or the table colouring never shows. */
+.buf-ok,   .cutoff-table tr.hard td.buf-ok   { color: #3EB849; font-weight: bold; }
+.buf-tight,.cutoff-table tr.hard td.buf-tight{ color: #CCC35E; font-weight: bold; }
+.buf-bad,  .cutoff-table tr.hard td.buf-bad  { color: #FF897D; font-weight: bold; }
+.buf-neg,  .cutoff-table tr.hard td.buf-neg  { color: #DB6559; font-weight: bold; }
 
 .profile-svg .you-label {
   fill: #DED087;
