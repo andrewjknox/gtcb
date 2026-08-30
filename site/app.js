@@ -808,6 +808,11 @@ async function main() {
   }
 
   $("boot-msg").classList.add("hidden");
+  /* panels must be un-hidden before any canvas draw: a display:none parent reports
+     clientWidth 0, which collapses both charts to their narrow-viewport minimum */
+  $("build-panel").classList.remove("hidden");
+  $("daily-panel").classList.remove("hidden");
+  $("flags-panel").classList.remove("hidden");
   initMetricToggle(state);
   renderHero(state);
   renderLegend(state.plan);
@@ -816,9 +821,6 @@ async function main() {
   drawDailyChart(state);
   renderFlags(state);
   renderFooter(state.current);
-  $("build-panel").classList.remove("hidden");
-  $("daily-panel").classList.remove("hidden");
-  $("flags-panel").classList.remove("hidden");
 
   let resizeTimer = null;
   window.addEventListener("resize", () => {
