@@ -1,0 +1,100 @@
+{
+  "iso_week": "2026-W36",
+  "training_week": 13,
+  "window": {
+    "start": "2026-08-31T00:00:00",
+    "end": "2026-09-06T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-09-01T20:30:00Z",
+  "activities": [
+    {
+      "id": 19994469009,
+      "name": "Treadmill @ 15%",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-01T18:03:17",
+      "distance_m": 6630,
+      "moving_time_s": 4202,
+      "elapsed_time_s": 4202,
+      "elevation_gain_m": 0,
+      "description": "3080ft ↗️"
+    },
+    {
+      "id": 19996309432,
+      "name": "Treadmill Elevation Log",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-01T18:00:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 938.8,
+      "description": null
+    },
+    {
+      "id": 19994467067,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-01T17:50:52",
+      "distance_m": 0,
+      "moving_time_s": 635,
+      "elapsed_time_s": 635,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19986244955,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-01T08:00:17",
+      "distance_m": 0,
+      "moving_time_s": 2457,
+      "elapsed_time_s": 2457,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19981210566,
+      "name": "Evening Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-31T20:52:16",
+      "distance_m": 2000,
+      "moving_time_s": 1492,
+      "elapsed_time_s": 2773,
+      "elevation_gain_m": 5,
+      "description": null
+    },
+    {
+      "id": 19979875421,
+      "name": "Club Run: 10mm Tail",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-08-31T18:51:08",
+      "distance_m": 5645,
+      "moving_time_s": 2417,
+      "elapsed_time_s": 2436,
+      "elevation_gain_m": 15,
+      "description": null
+    },
+    {
+      "id": 19979064771,
+      "name": "To DR",
+      "sport_type": "Walk",
+      "start_date_local": "2026-08-31T18:17:53",
+      "distance_m": 1464,
+      "moving_time_s": 880,
+      "elapsed_time_s": 918,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 19973667102,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-08-31T10:33:07",
+      "distance_m": 0,
+      "moving_time_s": 2959,
+      "elapsed_time_s": 2959,
+      "elevation_gain_m": 0,
+      "description": null
+    }
+  ]
+}
