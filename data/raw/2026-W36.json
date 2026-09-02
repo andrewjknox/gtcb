@@ -6,8 +6,19 @@
     "end": "2026-09-06T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-09-01T20:30:00Z",
+  "fetched_at": "2026-09-02T12:00:00Z",
   "activities": [
+    {
+      "id": 20000876179,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-09-02T05:45:15",
+      "distance_m": 12177,
+      "moving_time_s": 5288,
+      "elapsed_time_s": 5402,
+      "elevation_gain_m": 390,
+      "description": "⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
     {
       "id": 19994469009,
       "name": "Treadmill @ 15%",
