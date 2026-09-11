@@ -6,61 +6,61 @@
     "end": "2026-09-13T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-09-10T00:00:00Z",
+  "fetched_at": "2026-09-11T14:30:00Z",
   "activities": [
     {
-      "id": 20070804777,
+      "id": 20127303575,
+      "name": "Stair Machine 💦",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-11T08:28:33",
+      "distance_m": 208,
+      "moving_time_s": 5510,
+      "elapsed_time_s": 5510,
+      "elevation_gain_m": 0,
+      "description": "4354 ft ↗️"
+    },
+    {
+      "id": 20127303152,
       "name": "Morning Weight Training",
       "sport_type": "WeightTraining",
-      "start_date_local": "2026-09-07T08:18:47",
+      "start_date_local": "2026-09-11T08:00:03",
       "distance_m": 0,
-      "moving_time_s": 2234,
-      "elapsed_time_s": 2234,
+      "moving_time_s": 1653,
+      "elapsed_time_s": 1653,
       "elevation_gain_m": 0,
-      "description": "🦵"
+      "description": "🦵 before the stepper"
     },
     {
-      "id": 20070970846,
-      "name": "Stair Machine Elevation Log",
-      "sport_type": "Hike",
-      "start_date_local": "2026-09-07T08:30:00",
-      "distance_m": 16.0934,
-      "moving_time_s": 1,
-      "elapsed_time_s": 1,
-      "elevation_gain_m": 871.7,
-      "description": null
-    },
-    {
-      "id": 20070804789,
-      "name": "Stair Machine",
-      "sport_type": "Run",
-      "start_date_local": "2026-09-07T08:59:00",
-      "distance_m": 428,
-      "moving_time_s": 3682,
-      "elapsed_time_s": 3782,
+      "id": 20126299129,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-11T07:15:06",
+      "distance_m": 0,
+      "moving_time_s": 1732,
+      "elapsed_time_s": 1732,
       "elevation_gain_m": 0,
-      "description": "2860 ft ↗️"
+      "description": "Rehab before gym"
     },
     {
-      "id": 20076053843,
-      "name": "Afternoon Walk",
-      "sport_type": "Walk",
-      "start_date_local": "2026-09-07T16:11:26",
-      "distance_m": 3396,
-      "moving_time_s": 2148,
-      "elapsed_time_s": 4068,
-      "elevation_gain_m": 6,
-      "description": null
-    },
-    {
-      "id": 20078728850,
-      "name": "To DR",
+      "id": 20107465896,
+      "name": "Hollie's Loop x 2",
       "sport_type": "TrailRun",
-      "start_date_local": "2026-09-07T18:17:32",
-      "distance_m": 3282,
-      "moving_time_s": 1137,
-      "elapsed_time_s": 1211,
-      "elevation_gain_m": 3,
+      "start_date_local": "2026-09-09T16:50:52",
+      "distance_m": 24665,
+      "moving_time_s": 10862,
+      "elapsed_time_s": 11400,
+      "elevation_gain_m": 795,
+      "description": "⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20084392505,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-08T07:58:41",
+      "distance_m": 0,
+      "moving_time_s": 3263,
+      "elapsed_time_s": 3263,
+      "elevation_gain_m": 0,
       "description": null
     },
     {
@@ -75,26 +75,59 @@
       "description": null
     },
     {
-      "id": 20084392505,
-      "name": "Morning Weight Training",
-      "sport_type": "WeightTraining",
-      "start_date_local": "2026-09-08T07:58:41",
-      "distance_m": 0,
-      "moving_time_s": 3263,
-      "elapsed_time_s": 3263,
-      "elevation_gain_m": 0,
+      "id": 20078728850,
+      "name": "To DR",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-09-07T18:17:32",
+      "distance_m": 3282,
+      "moving_time_s": 1137,
+      "elapsed_time_s": 1211,
+      "elevation_gain_m": 3,
       "description": null
     },
     {
-      "id": 20107465896,
-      "name": "Hollie's Loop x 2",
-      "sport_type": "TrailRun",
-      "start_date_local": "2026-09-09T16:50:52",
-      "distance_m": 24665,
-      "moving_time_s": 10862,
-      "elapsed_time_s": 11400,
-      "elevation_gain_m": 795,
-      "description": "⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+      "id": 20076053843,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-07T16:11:26",
+      "distance_m": 3396,
+      "moving_time_s": 2148,
+      "elapsed_time_s": 4068,
+      "elevation_gain_m": 6,
+      "description": null
+    },
+    {
+      "id": 20070804789,
+      "name": "Stair Machine",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-07T08:59:00",
+      "distance_m": 428,
+      "moving_time_s": 3682,
+      "elapsed_time_s": 3782,
+      "elevation_gain_m": 0,
+      "description": "2860 ft ↗️"
+    },
+    {
+      "id": 20070970846,
+      "name": "Stair Machine Elevation Log",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-07T08:30:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 871.7,
+      "description": null
+    },
+    {
+      "id": 20070804777,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-07T08:18:47",
+      "distance_m": 0,
+      "moving_time_s": 2234,
+      "elapsed_time_s": 2234,
+      "elevation_gain_m": 0,
+      "description": "🦵"
     }
   ]
 }
