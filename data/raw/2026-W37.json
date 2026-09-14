@@ -6,8 +6,74 @@
     "end": "2026-09-13T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-09-11T15:30:00Z",
+  "fetched_at": "2026-09-14T00:00:00Z",
   "activities": [
+    {
+      "id": 20162237807,
+      "name": "Evening Swim",
+      "sport_type": "Swim",
+      "start_date_local": "2026-09-13T19:46:28",
+      "distance_m": 200,
+      "moving_time_s": 155,
+      "elapsed_time_s": 700,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20161941045,
+      "name": "Evening Run",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-13T18:26:57",
+      "distance_m": 10018,
+      "moving_time_s": 3477,
+      "elapsed_time_s": 3507,
+      "elevation_gain_m": 12,
+      "description": "A lot warmer than this mornings run 🫠 A rare evening run day. An even rarer double run day."
+    },
+    {
+      "id": 20160014920,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-13T16:11:31",
+      "distance_m": 0,
+      "moving_time_s": 3473,
+      "elapsed_time_s": 3473,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20153519639,
+      "name": "Morning Run",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-13T08:06:57",
+      "distance_m": 16284,
+      "moving_time_s": 6362,
+      "elapsed_time_s": 6686,
+      "elevation_gain_m": 308,
+      "description": null
+    },
+    {
+      "id": 20138796973,
+      "name": "Altea Run Club 🎉🍅☕",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-12T08:07:06",
+      "distance_m": 5041,
+      "moving_time_s": 1761,
+      "elapsed_time_s": 1761,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20129756111,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-11T13:27:08",
+      "distance_m": 0,
+      "moving_time_s": 1278,
+      "elapsed_time_s": 1278,
+      "elevation_gain_m": 0,
+      "description": null
+    },
     {
       "id": 20127980208,
       "name": "Stair Machine Elevation Log",
@@ -39,7 +105,7 @@
       "moving_time_s": 1653,
       "elapsed_time_s": 1653,
       "elevation_gain_m": 0,
-      "description": "🦵 before the stepper "
+      "description": "🦵 before the stepper"
     },
     {
       "id": 20126299129,
