@@ -1,0 +1,89 @@
+{
+  "iso_week": "2026-W38",
+  "training_week": 15,
+  "window": {
+    "start": "2026-09-14T00:00:00",
+    "end": "2026-09-20T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-09-14T00:00:00Z",
+  "activities": [
+    {
+      "id": 20226473029,
+      "name": "Lunch Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-18T12:59:12",
+      "distance_m": 3271,
+      "moving_time_s": 2515,
+      "elapsed_time_s": 5095,
+      "elevation_gain_m": 51,
+      "description": null
+    },
+    {
+      "id": 20224359382,
+      "name": "Morning Ride ☕",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-18T07:57:23",
+      "distance_m": 36542,
+      "moving_time_s": 6217,
+      "elapsed_time_s": 12047,
+      "elevation_gain_m": 528,
+      "description": "Man I love cycling here 👌 Gatecrashed ARC Swim Squad for breakfast in Altea la Vella"
+    },
+    {
+      "id": 20218280344,
+      "name": "Evening Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-17T20:27:51",
+      "distance_m": 0,
+      "moving_time_s": 2702,
+      "elapsed_time_s": 2702,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20210965202,
+      "name": "Morning Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-17T10:34:19",
+      "distance_m": 1157,
+      "moving_time_s": 864,
+      "elapsed_time_s": 2883,
+      "elevation_gain_m": 20,
+      "description": null
+    },
+    {
+      "id": 20205924178,
+      "name": "Sierra Helada x 3 Night Edition 🌃",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-16T20:29:56",
+      "distance_m": 12419,
+      "moving_time_s": 10387,
+      "elapsed_time_s": 10871,
+      "elevation_gain_m": 1114,
+      "description": "Rained just enough for the rocks to get nice n' greasy 👌 First of the headlamp sessions banked.\r\n\r\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20196085684,
+      "name": "Sierra Helada x 3 🌄",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-16T06:46:06",
+      "distance_m": 12525,
+      "moving_time_s": 10010,
+      "elapsed_time_s": 10139,
+      "elevation_gain_m": 1124,
+      "description": "⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20180686548,
+      "name": "Morning Ride",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-15T07:42:47",
+      "distance_m": 15655,
+      "moving_time_s": 2928,
+      "elapsed_time_s": 3612,
+      "elevation_gain_m": 231,
+      "description": "Quick test ride after changing the sealant (not as bad as I thought it'd be). Feels good to be back on the open road 🙌"
+    }
+  ]
+}
