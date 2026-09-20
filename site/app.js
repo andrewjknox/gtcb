@@ -94,6 +94,12 @@ function fmtTofTarget(h) {
   return h + "h";
 }
 
+/* plan week start "2026-09-21" -> "21/09" (plain string split: no TZ shifts) */
+function fmtWeekStart(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+  return m ? m[3] + "/" + m[2] : "";
+}
+
 function statusClass(pct) {
   if (pct >= 100) return "ok";
   if (pct >= 70) return "warn";
@@ -409,7 +415,9 @@ function drawBuildChart(state) {
     const s = state.byIso[wk.iso_week];
     const color = PHASE_COLORS[wk.phase] || C.gray;
     const isCur = wk.week === curTW;
+    const startLabel = fmtWeekStart(wk.start);
     let text = "W" + wk.week + " · " + wk.phase.toUpperCase() + " · " + wk.iso_week;
+    if (startLabel) text += " · " + startLabel;
 
     if (timeMode) {
       const tof = tofTargetH(wk);
