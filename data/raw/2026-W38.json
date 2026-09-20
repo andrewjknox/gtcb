@@ -6,8 +6,30 @@
     "end": "2026-09-20T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-09-14T00:00:00Z",
+  "fetched_at": "2026-09-20T12:30:00Z",
   "activities": [
+    {
+      "id": 20245636108,
+      "name": "Faldes del Puig Campana 🏔️🔦",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-09-19T19:30:13",
+      "distance_m": 15410,
+      "moving_time_s": 7096,
+      "elapsed_time_s": 7204,
+      "elevation_gain_m": 838.2,
+      "description": "Been a while since I've pushed pace, legs getting stronger, definitely felt it on the climbs. Shame I rolled my ankle twice 😖 Knee/quad tendon been sore recently but bizarrely felt ok hammering the descents tonight 🎉\n⛰️ Tossal d'Avellà (2,441 ft) • ⛰️ El Collado del Pouet (2,899 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20236178550,
+      "name": "ARC ☕🍅",
+      "sport_type": "Run",
+      "start_date_local": "2026-09-19T08:09:25",
+      "distance_m": 5014,
+      "moving_time_s": 1635,
+      "elapsed_time_s": 1635,
+      "elevation_gain_m": 5,
+      "description": null
+    },
     {
       "id": 20226473029,
       "name": "Lunch Walk",
