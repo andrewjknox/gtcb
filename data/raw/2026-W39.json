@@ -1,0 +1,111 @@
+{
+  "iso_week": "2026-W39",
+  "training_week": 16,
+  "window": {
+    "start": "2026-09-21T00:00:00",
+    "end": "2026-09-27T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-09-24T12:00:00Z",
+  "activities": [
+    {
+      "id": 20308552314,
+      "name": "Lunch Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-24T11:22:57",
+      "distance_m": 966,
+      "moving_time_s": 783,
+      "elapsed_time_s": 4581,
+      "elevation_gain_m": 15,
+      "description": null
+    },
+    {
+      "id": 20307244074,
+      "name": "Sierra Helada Reps : Road Edition",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-24T07:39:44",
+      "distance_m": 14299,
+      "moving_time_s": 9231,
+      "elapsed_time_s": 9477,
+      "elevation_gain_m": 1070,
+      "description": "Ankle okay here 👍\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20292451996,
+      "name": "Morning Ride",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-23T07:35:23",
+      "distance_m": 33535,
+      "moving_time_s": 5667,
+      "elapsed_time_s": 5742,
+      "elevation_gain_m": 531,
+      "description": null
+    },
+    {
+      "id": 20287208883,
+      "name": "Night Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-09-22T21:09:02",
+      "distance_m": 0,
+      "moving_time_s": 2966,
+      "elapsed_time_s": 2966,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20277775181,
+      "name": "Morning Ride",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-22T07:45:45",
+      "distance_m": 33832,
+      "moving_time_s": 5836,
+      "elapsed_time_s": 5907,
+      "elevation_gain_m": 537,
+      "description": "Ankle absolutely fine doing this 🙌"
+    },
+    {
+      "id": 20269304034,
+      "name": "Afternoon Swim",
+      "sport_type": "Swim",
+      "start_date_local": "2026-09-21T17:34:21",
+      "distance_m": 250,
+      "moving_time_s": 186,
+      "elapsed_time_s": 2007,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20268726115,
+      "name": "Afternoon Ride",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-21T17:16:06",
+      "distance_m": 1829,
+      "moving_time_s": 458,
+      "elapsed_time_s": 458,
+      "elevation_gain_m": 52,
+      "description": null
+    },
+    {
+      "id": 20268725969,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-21T16:51:54",
+      "distance_m": 1847,
+      "moving_time_s": 1278,
+      "elapsed_time_s": 1427,
+      "elevation_gain_m": 5,
+      "description": null
+    },
+    {
+      "id": 20265137531,
+      "name": "Lunch Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-21T11:24:51",
+      "distance_m": 1391,
+      "moving_time_s": 1051,
+      "elapsed_time_s": 2961,
+      "elevation_gain_m": 55,
+      "description": null
+    }
+  ]
+}
