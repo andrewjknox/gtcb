@@ -1,0 +1,23 @@
+{
+  "iso_week": "2026-W40",
+  "training_week": 17,
+  "window": {
+    "start": "2026-09-28T00:00:00",
+    "end": "2026-10-04T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-09-28T09:30:00Z",
+  "activities": [
+    {
+      "id": 20360271906,
+      "name": "Sierra Helada x 7 🌃🌄",
+      "sport_type": "Hike",
+      "start_date_local": "2026-09-28T01:30:33",
+      "distance_m": 27597,
+      "moving_time_s": 24403,
+      "elapsed_time_s": 25831,
+      "elevation_gain_m": 2592,
+      "description": "More headlamp action, finally practiced with poles (2 reps). Thought I may as well do this session when fireworks and music kicked off hard in Altea at midnight 😂\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    }
+  ]
+}
