@@ -6,8 +6,63 @@
     "end": "2026-10-04T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-09-28T09:30:00Z",
+  "fetched_at": "2026-10-01T00:00:00Z",
   "activities": [
+    {
+      "id": 20403407136,
+      "name": "Hill Reps x 6 💀",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-01T07:43:59",
+      "distance_m": 20518,
+      "moving_time_s": 8408,
+      "elapsed_time_s": 8841,
+      "elevation_gain_m": 616,
+      "description": "Anchor to Quarry "
+    },
+    {
+      "id": 20397624548,
+      "name": "Evening Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-30T18:47:03",
+      "distance_m": 2962,
+      "moving_time_s": 2263,
+      "elapsed_time_s": 8688,
+      "elevation_gain_m": 67,
+      "description": null
+    },
+    {
+      "id": 20388952561,
+      "name": "Morning Ride",
+      "sport_type": "Ride",
+      "start_date_local": "2026-09-30T07:38:43",
+      "distance_m": 33739,
+      "moving_time_s": 5537,
+      "elapsed_time_s": 5555,
+      "elevation_gain_m": 546,
+      "description": "Quick blast before work 👌"
+    },
+    {
+      "id": 20374341017,
+      "name": "Morning Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-29T08:19:10",
+      "distance_m": 3348,
+      "moving_time_s": 2364,
+      "elapsed_time_s": 5077,
+      "elevation_gain_m": 61,
+      "description": null
+    },
+    {
+      "id": 20362169466,
+      "name": "Morning Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-09-28T10:17:53",
+      "distance_m": 3182,
+      "moving_time_s": 2197,
+      "elapsed_time_s": 8566,
+      "elevation_gain_m": 66,
+      "description": null
+    },
     {
       "id": 20360271906,
       "name": "Sierra Helada x 7 🌃🌄",
@@ -17,7 +72,7 @@
       "moving_time_s": 24403,
       "elapsed_time_s": 25831,
       "elevation_gain_m": 2592,
-      "description": "More headlamp action, finally practiced with poles (2 reps). Thought I may as well do this session when fireworks and music kicked off hard in Altea at midnight 😂\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+      "description": "More headlamp action, finally practiced with poles (2 reps). Thought I may as well do this session when fireworks and music kicked off hard in Altea at midnight and I wasn't going to get any sleep 😂\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
     }
   ]
 }
