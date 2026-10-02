@@ -6,8 +6,41 @@
     "end": "2026-10-04T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-01T00:00:00Z",
+  "fetched_at": "2026-10-02T12:30:00Z",
   "activities": [
+    {
+      "id": 20418462310,
+      "name": "Lunch Hike",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-02T12:15:21",
+      "distance_m": 4315,
+      "moving_time_s": 3482,
+      "elapsed_time_s": 3616,
+      "elevation_gain_m": 393,
+      "description": "⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20418462521,
+      "name": "Sierra Helada: Time Trial!",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-02T11:31:38",
+      "distance_m": 4217,
+      "moving_time_s": 2402,
+      "elapsed_time_s": 2520,
+      "elevation_gain_m": 378,
+      "description": "Humid 🥵\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20416228885,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-02T07:39:38",
+      "distance_m": 0,
+      "moving_time_s": 4099,
+      "elapsed_time_s": 4099,
+      "elevation_gain_m": 0,
+      "description": null
+    },
     {
       "id": 20403407136,
       "name": "Hill Reps x 6 💀",
