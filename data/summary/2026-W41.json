@@ -1,0 +1,74 @@
+{
+  "iso_week": "2026-W41",
+  "training_week": 18,
+  "phase": "Peak",
+  "generated_at": "2026-10-05T17:10:48Z",
+  "window": {
+    "start": "2026-10-05T00:00:00",
+    "end": "2026-10-11T23:59:59",
+    "tz": "Europe/London"
+  },
+  "days_elapsed": 1,
+  "vert": {
+    "actual_m": 1385,
+    "target_m": 4200,
+    "prorated_target_m": 600,
+    "pct_of_target": 33,
+    "pct_of_prorated": 231
+  },
+  "time_on_feet": {
+    "actual_s": 14254
+  },
+  "distance": {
+    "actual_m": 21416
+  },
+  "sessions": {
+    "count": 1,
+    "on_foot_count": 1
+  },
+  "daily": [
+    {
+      "date": "2026-10-05",
+      "vert_m": 1385,
+      "time_s": 14254,
+      "distance_m": 21416
+    },
+    {
+      "date": "2026-10-06",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-10-07",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-10-08",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-10-09",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-10-10",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-10-11",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    }
+  ],
+  "flags": []
+}

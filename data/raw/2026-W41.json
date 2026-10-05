@@ -1,0 +1,23 @@
+{
+  "iso_week": "2026-W41",
+  "training_week": 18,
+  "window": {
+    "start": "2026-10-05T00:00:00",
+    "end": "2026-10-11T23:59:59",
+    "tz": "Europe/London"
+  },
+  "fetched_at": "2026-10-05T20:30:00Z",
+  "activities": [
+    {
+      "id": 20460112268,
+      "name": "Mellor Cross Reps",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-05T10:19:38",
+      "distance_m": 21416,
+      "moving_time_s": 14254,
+      "elapsed_time_s": 14892,
+      "elevation_gain_m": 1385,
+      "description": "Bouts of downhill running ⛰️ Mellor Moor (1,075 ft) | 🌐 summitbag.com"
+    }
+  ]
+}

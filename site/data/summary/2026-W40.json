@@ -2,19 +2,19 @@
   "iso_week": "2026-W40",
   "training_week": 17,
   "phase": "Peak",
-  "generated_at": "2026-10-03T13:39:51Z",
+  "generated_at": "2026-10-05T17:10:46Z",
   "window": {
     "start": "2026-09-28T00:00:00",
     "end": "2026-10-04T23:59:59",
     "tz": "Europe/London"
   },
-  "days_elapsed": 6,
+  "days_elapsed": 7,
   "vert": {
     "actual_m": 4028,
     "target_m": 4000,
-    "prorated_target_m": 3429,
+    "prorated_target_m": 4000,
     "pct_of_target": 101,
-    "pct_of_prorated": 117
+    "pct_of_prorated": 101
   },
   "time_on_feet": {
     "actual_s": 42144
@@ -23,7 +23,7 @@
     "actual_m": 67634
   },
   "sessions": {
-    "count": 13,
+    "count": 15,
     "on_foot_count": 7
   },
   "daily": [
