@@ -6,8 +6,63 @@
     "end": "2026-10-11T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-05T20:30:00Z",
+  "fetched_at": "2026-10-06T20:15:00Z",
   "activities": [
+    {
+      "id": 20479845188,
+      "name": "Treadmill Elevation Log",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-06T20:00:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 615.7,
+      "description": null
+    },
+    {
+      "id": 20478490413,
+      "name": "Treadmill @ 10%",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-06T17:55:05",
+      "distance_m": 6437,
+      "moving_time_s": 3659,
+      "elapsed_time_s": 3667,
+      "elevation_gain_m": 0,
+      "description": "2020 ft ↗️"
+    },
+    {
+      "id": 20478490291,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-06T17:21:57",
+      "distance_m": 0,
+      "moving_time_s": 1597,
+      "elapsed_time_s": 1597,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20470284878,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-06T07:36:47",
+      "distance_m": 0,
+      "moving_time_s": 2984,
+      "elapsed_time_s": 2984,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20464291510,
+      "name": "Club Run: 10mm",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-05T18:55:37",
+      "distance_m": 5012,
+      "moving_time_s": 1920,
+      "elapsed_time_s": 1996,
+      "elevation_gain_m": 8,
+      "description": null
+    },
     {
       "id": 20460112268,
       "name": "Mellor Cross Reps",
