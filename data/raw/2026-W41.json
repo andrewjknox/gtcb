@@ -6,8 +6,19 @@
     "end": "2026-10-11T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-06T20:15:00Z",
+  "fetched_at": "2026-10-08T14:00:00Z",
   "activities": [
+    {
+      "id": 20502797349,
+      "name": "Hollie's Loop x 4 (+ some hill reps for more vert)",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-08T05:42:56",
+      "distance_m": 56835,
+      "moving_time_s": 27496,
+      "elapsed_time_s": 31953,
+      "elevation_gain_m": 1899,
+      "description": "Final big training session done for CBT. Full kit dress rehearsal (except shoes which are in 🇪🇸) with all mandatory gear in vest. Had poles throughout so good to get practice in, feeling that in the triceps.\n\n⛰️ Sponds Hill (1,355 ft) • ⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
     {
       "id": 20479845188,
       "name": "Treadmill Elevation Log",
