@@ -6,8 +6,63 @@
     "end": "2026-10-11T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-08T14:00:00Z",
+  "fetched_at": "2026-10-13T11:47:26Z",
   "activities": [
+    {
+      "id": 20543558540,
+      "name": "Afternoon Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-10-11T13:24:49",
+      "distance_m": 5771,
+      "moving_time_s": 4991,
+      "elapsed_time_s": 9690,
+      "elevation_gain_m": 46,
+      "description": null
+    },
+    {
+      "id": 20538036492,
+      "name": "Morning Run ☀️",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-11T09:44:31",
+      "distance_m": 5510,
+      "moving_time_s": 1850,
+      "elapsed_time_s": 1853,
+      "elevation_gain_m": 63,
+      "description": null
+    },
+    {
+      "id": 20531920199,
+      "name": "Evening Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-10-10T18:45:50",
+      "distance_m": 1107,
+      "moving_time_s": 998,
+      "elapsed_time_s": 1162,
+      "elevation_gain_m": 32,
+      "description": null
+    },
+    {
+      "id": 20526966457,
+      "name": "Lurgan parkrun 💥🍒",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-10T09:31:00",
+      "distance_m": 5050,
+      "moving_time_s": 1633,
+      "elapsed_time_s": 1633,
+      "elevation_gain_m": 32,
+      "description": "Bumped into a mate from school!"
+    },
+    {
+      "id": 20514910670,
+      "name": "Lunch Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-09T12:35:16",
+      "distance_m": 0,
+      "moving_time_s": 4230,
+      "elapsed_time_s": 4230,
+      "elevation_gain_m": 0,
+      "description": null
+    },
     {
       "id": 20502797349,
       "name": "Hollie's Loop x 4 (+ some hill reps for more vert)",
