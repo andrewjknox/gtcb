@@ -6,8 +6,107 @@
     "end": "2026-10-18T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-13T11:47:26Z",
+  "fetched_at": "2026-10-16T20:30:00Z",
   "activities": [
+    {
+      "id": 20612066497,
+      "name": "Treadmill @ 15%",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-16T18:25:46",
+      "distance_m": 4876,
+      "moving_time_s": 3641,
+      "elapsed_time_s": 3641,
+      "elevation_gain_m": 0,
+      "description": "2375ft ↗️"
+    },
+    {
+      "id": 20612428772,
+      "name": "Treadmill Elevation Log",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-16T18:00:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 723.9,
+      "description": null
+    },
+    {
+      "id": 20612066811,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-16T17:57:17",
+      "distance_m": 0,
+      "moving_time_s": 1646,
+      "elapsed_time_s": 1646,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20597602774,
+      "name": "Hollie's Loop x 2 🌧️🌧️",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-15T13:41:04",
+      "distance_m": 28408,
+      "moving_time_s": 12182,
+      "elapsed_time_s": 12530,
+      "elevation_gain_m": 935,
+      "description": "Hard 1st lap, easy 2nd lap + an extra hill\n⛰️ Sponds Hill (1,355 ft) • ⛰️ Higher Moor (1,319 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20594270546,
+      "name": "Lunch Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-10-15T12:06:06",
+      "distance_m": 2157,
+      "moving_time_s": 1368,
+      "elapsed_time_s": 1907,
+      "elevation_gain_m": 2,
+      "description": "RIP Pete 🪦"
+    },
+    {
+      "id": 20592966147,
+      "name": "Morning Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-10-15T10:27:52",
+      "distance_m": 2169,
+      "moving_time_s": 1281,
+      "elapsed_time_s": 1538,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20592338410,
+      "name": "Morning Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-15T08:47:21",
+      "distance_m": 0,
+      "moving_time_s": 2896,
+      "elapsed_time_s": 2896,
+      "elevation_gain_m": 0,
+      "description": null
+    },
+    {
+      "id": 20578009642,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-14T06:49:45",
+      "distance_m": 14949,
+      "moving_time_s": 5254,
+      "elapsed_time_s": 5311,
+      "elevation_gain_m": 21,
+      "description": null
+    },
+    {
+      "id": 20572262880,
+      "name": "Evening Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-13T18:59:52",
+      "distance_m": 0,
+      "moving_time_s": 3218,
+      "elapsed_time_s": 3218,
+      "elevation_gain_m": 0,
+      "description": null
+    },
     {
       "id": 20550462707,
       "name": "Morning Run",
