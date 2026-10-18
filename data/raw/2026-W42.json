@@ -6,8 +6,41 @@
     "end": "2026-10-18T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-17T12:00:00Z",
+  "fetched_at": "2026-10-18T23:59:59Z",
   "activities": [
+    {
+      "id": 20631877494,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-18T10:26:15",
+      "distance_m": 1629,
+      "moving_time_s": 506,
+      "elapsed_time_s": 509,
+      "elevation_gain_m": 0,
+      "description": "Back to car ⛰️ Beacon Hill (814 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20631877537,
+      "name": "Beacon Hill Reps",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-18T09:27:58",
+      "distance_m": 5771,
+      "moving_time_s": 3401,
+      "elapsed_time_s": 3401,
+      "elevation_gain_m": 444,
+      "description": "Remaining vert for the week ⛰️ Beacon Hill (814 ft) | 🌐 summitbag.com"
+    },
+    {
+      "id": 20631877067,
+      "name": "Morning Trail Run",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-18T08:35:08",
+      "distance_m": 8204,
+      "moving_time_s": 3070,
+      "elapsed_time_s": 3074,
+      "elevation_gain_m": 276,
+      "description": "⛰️ Beacon Hill (814 ft) | 🌐 summitbag.com"
+    },
     {
       "id": 20619586104,
       "name": "Hollie's Loop ☀️",
