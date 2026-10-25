@@ -6,83 +6,39 @@
     "end": "2026-10-25T23:59:59",
     "tz": "Europe/London"
   },
-  "fetched_at": "2026-10-25T15:00:00Z",
+  "fetched_at": "2026-10-25T14:35:00Z",
   "activities": [
     {
-      "id": 20722988012,
-      "name": "Treadmill @ 15%",
-      "sport_type": "Run",
-      "start_date_local": "2026-10-25T08:43:15",
-      "distance_m": 7274,
-      "moving_time_s": 5453,
-      "elapsed_time_s": 5453,
-      "elevation_gain_m": 0,
-      "description": "3564ft ↗️"
-    },
-    {
-      "id": 20722987854,
-      "name": "Morning Weight Training",
-      "sport_type": "WeightTraining",
-      "start_date_local": "2026-10-25T08:14:00",
-      "distance_m": 0,
-      "moving_time_s": 1650,
-      "elapsed_time_s": 1650,
-      "elevation_gain_m": 0,
-      "description": null
-    },
-    {
-      "id": 20709047376,
-      "name": "FM parkrun ☕",
-      "sport_type": "TrailRun",
-      "start_date_local": "2026-10-24T09:06:33",
-      "distance_m": 5016,
-      "moving_time_s": 1400,
-      "elapsed_time_s": 1400,
-      "elevation_gain_m": 28,
-      "description": "A rare dash o' speed "
-    },
-    {
-      "id": 20709046968,
-      "name": "To parkrun",
-      "sport_type": "TrailRun",
-      "start_date_local": "2026-10-24T08:17:10",
-      "distance_m": 5884,
-      "moving_time_s": 2144,
-      "elapsed_time_s": 2258,
-      "elevation_gain_m": 19,
-      "description": null
-    },
-    {
-      "id": 20713293251,
-      "name": "Treadmill Elevation Log",
-      "sport_type": "Run",
-      "start_date_local": "2026-10-23T17:30:00",
-      "distance_m": 16.0934,
-      "moving_time_s": 1,
-      "elapsed_time_s": 1,
-      "elevation_gain_m": 768.1,
-      "description": null
-    },
-    {
-      "id": 20703111944,
-      "name": "Treadmill @ 15%",
-      "sport_type": "Run",
-      "start_date_local": "2026-10-23T17:25:28",
-      "distance_m": 5085,
-      "moving_time_s": 3623,
-      "elapsed_time_s": 3623,
-      "elevation_gain_m": 0,
-      "description": "2520ft ↗️"
-    },
-    {
-      "id": 20693927580,
-      "name": "Night Walk",
+      "id": 20644258118,
+      "name": "Morning Walk 💉",
       "sport_type": "Walk",
-      "start_date_local": "2026-10-22T22:36:50",
-      "distance_m": 3740,
-      "moving_time_s": 2376,
-      "elapsed_time_s": 2423,
-      "elevation_gain_m": 9,
+      "start_date_local": "2026-10-19T08:46:05",
+      "distance_m": 5234,
+      "moving_time_s": 3250,
+      "elapsed_time_s": 4188,
+      "elevation_gain_m": 6,
+      "description": "COVID + flu vaccines"
+    },
+    {
+      "id": 20651032728,
+      "name": "Club Run: 9:30mm Tail",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-19T18:53:53",
+      "distance_m": 5250,
+      "moving_time_s": 1855,
+      "elapsed_time_s": 1918,
+      "elevation_gain_m": 15,
+      "description": null
+    },
+    {
+      "id": 20677538556,
+      "name": "Afternoon Weight Training",
+      "sport_type": "WeightTraining",
+      "start_date_local": "2026-10-21T15:49:13",
+      "distance_m": 0,
+      "moving_time_s": 1979,
+      "elapsed_time_s": 1979,
+      "elevation_gain_m": 0,
       "description": null
     },
     {
@@ -97,37 +53,92 @@
       "description": "Back to running after the vaccines took me out for two days. Timed well with a deload week 👌"
     },
     {
-      "id": 20677538556,
-      "name": "Afternoon Weight Training",
+      "id": 20693927580,
+      "name": "Night Walk",
+      "sport_type": "Walk",
+      "start_date_local": "2026-10-22T22:36:50",
+      "distance_m": 3740,
+      "moving_time_s": 2376,
+      "elapsed_time_s": 2423,
+      "elevation_gain_m": 9,
+      "description": null
+    },
+    {
+      "id": 20703111944,
+      "name": "Treadmill @ 15%",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-23T17:25:28",
+      "distance_m": 5085,
+      "moving_time_s": 3623,
+      "elapsed_time_s": 3623,
+      "elevation_gain_m": 0,
+      "description": "2520ft ↗️"
+    },
+    {
+      "id": 20713293251,
+      "name": "Treadmill Elevation Log",
+      "sport_type": "Run",
+      "start_date_local": "2026-10-23T17:30:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 768.1,
+      "description": null
+    },
+    {
+      "id": 20709046968,
+      "name": "To parkrun",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-24T08:17:10",
+      "distance_m": 5884,
+      "moving_time_s": 2144,
+      "elapsed_time_s": 2258,
+      "elevation_gain_m": 19,
+      "description": null
+    },
+    {
+      "id": 20709047376,
+      "name": "FM parkrun ☕",
+      "sport_type": "TrailRun",
+      "start_date_local": "2026-10-24T09:06:33",
+      "distance_m": 5016,
+      "moving_time_s": 1400,
+      "elapsed_time_s": 1400,
+      "elevation_gain_m": 28,
+      "description": "A rare dash o' speed"
+    },
+    {
+      "id": 20722987854,
+      "name": "Morning Weight Training",
       "sport_type": "WeightTraining",
-      "start_date_local": "2026-10-21T15:49:13",
+      "start_date_local": "2026-10-25T08:14:00",
       "distance_m": 0,
-      "moving_time_s": 1979,
-      "elapsed_time_s": 1979,
+      "moving_time_s": 1650,
+      "elapsed_time_s": 1650,
       "elevation_gain_m": 0,
       "description": null
     },
     {
-      "id": 20651032728,
-      "name": "Club Run: 9:30mm Tail",
+      "id": 20722988012,
+      "name": "Treadmill @ 15%",
       "sport_type": "Run",
-      "start_date_local": "2026-10-19T18:53:53",
-      "distance_m": 5250,
-      "moving_time_s": 1855,
-      "elapsed_time_s": 1918,
-      "elevation_gain_m": 15,
-      "description": null
+      "start_date_local": "2026-10-25T08:43:15",
+      "distance_m": 7274,
+      "moving_time_s": 5453,
+      "elapsed_time_s": 5453,
+      "elevation_gain_m": 0,
+      "description": "3564ft ↗️"
     },
     {
-      "id": 20644258118,
-      "name": "Morning Walk 💉",
-      "sport_type": "Walk",
-      "start_date_local": "2026-10-19T08:46:05",
-      "distance_m": 5234,
-      "moving_time_s": 3250,
-      "elapsed_time_s": 4188,
-      "elevation_gain_m": 6,
-      "description": "COVID + flu vaccines"
+      "id": 20723458382,
+      "name": "Treadmill Elevation Log",
+      "sport_type": "Hike",
+      "start_date_local": "2026-10-25T09:40:00",
+      "distance_m": 16.0934,
+      "moving_time_s": 1,
+      "elapsed_time_s": 1,
+      "elevation_gain_m": 1086.3,
+      "description": null
     }
   ]
 }
