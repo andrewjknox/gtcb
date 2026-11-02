@@ -30,9 +30,9 @@ const PHASE_COLORS = {
   Race: C.magenta
 };
 
-/* Race day: Fri 2026-11-13, Europe/London. London is on GMT (UTC+0) in
-   November, so midnight local == midnight UTC. */
-const RACE_START_UTC_MS = Date.UTC(2026, 10, 13, 0, 0, 0);
+/* Race start: Fri 2026-11-13, gun time 23:00 CET (Europe/Madrid, UTC+1 in
+   November) = 22:00 UTC. */
+const RACE_START_UTC_MS = Date.UTC(2026, 10, 13, 22, 0, 0);
 
 const FONT = '11px "Consolas", "Courier New", Courier, monospace';
 const FONT_BOLD = 'bold 11px "Consolas", "Courier New", Courier, monospace';
