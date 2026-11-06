@@ -19,6 +19,7 @@
     ]],
     ["course.html", "Course"],
     ["regs.html", "102K Regs"],
+    ["guide.html", "Runner's Guide"],
     ["conditions.html", "Entry Conditions"]
   ];
 
