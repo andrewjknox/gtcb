@@ -19,8 +19,7 @@
     ]],
     ["course.html", "Course"],
     ["regs.html", "102K Regs"],
-    ["guide.html", "Runner's Guide"],
-    ["conditions.html", "Entry Conditions"]
+    ["guide.html", "Runner's Guide"]
   ];
 
   var nav = document.querySelector("nav.site-nav");
