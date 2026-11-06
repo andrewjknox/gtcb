@@ -1,0 +1,18 @@
+{
+  "iso_week": "2026-W45",
+  "training_week": 22,
+  "window": { "start": "2026-11-02T00:00:00", "end": "2026-11-08T23:59:59", "tz": "Europe/London" },
+  "fetched_at": "2026-11-06T15:30:50Z",
+  "activities": [
+    { "id": 20827929814, "name": "Lunch Walk 🦷", "sport_type": "Walk", "start_date_local": "2026-11-02T11:14:17", "distance_m": 5108, "moving_time_s": 2707, "elapsed_time_s": 6172, "elevation_gain_m": 57, "description": null },
+    { "id": 20829988984, "name": "CBT Race Pack Pick-up", "sport_type": "Ride", "start_date_local": "2026-11-02T14:06:48", "distance_m": 25881, "moving_time_s": 4615, "elapsed_time_s": 5738, "elevation_gain_m": 191, "description": "Already sweated into my race number 🙄 " },
+    { "id": 20839043554, "name": "Morning Run ☕🥐", "sport_type": "Run", "start_date_local": "2026-11-03T07:53:18", "distance_m": 8500, "moving_time_s": 3054, "elapsed_time_s": 3110, "elevation_gain_m": 48, "description": "+ 4 strides. La Provence to finish 🤤" },
+    { "id": 20847991655, "name": "Evening Weight Training", "sport_type": "WeightTraining", "start_date_local": "2026-11-03T20:44:19", "distance_m": 0, "moving_time_s": 2827, "elapsed_time_s": 2827, "elevation_gain_m": 0, "description": null },
+    { "id": 20853343149, "name": "Morning Walk", "sport_type": "Walk", "start_date_local": "2026-11-04T08:42:18", "distance_m": 5504, "moving_time_s": 3274, "elapsed_time_s": 3302, "elevation_gain_m": 125, "description": null },
+    { "id": 20866484883, "name": "Morning Weight Training", "sport_type": "WeightTraining", "start_date_local": "2026-11-05T07:56:50", "distance_m": 0, "moving_time_s": 3888, "elapsed_time_s": 3888, "elevation_gain_m": 0, "description": null },
+    { "id": 20866942399, "name": "Morning Walk", "sport_type": "Walk", "start_date_local": "2026-11-05T09:15:18", "distance_m": 3918, "moving_time_s": 2537, "elapsed_time_s": 2564, "elevation_gain_m": 67, "description": null },
+    { "id": 20869861463, "name": "Afternoon Walk", "sport_type": "Walk", "start_date_local": "2026-11-05T13:41:22", "distance_m": 3135, "moving_time_s": 2001, "elapsed_time_s": 2619, "elevation_gain_m": 53, "description": "Picked up new shoes for CBT (risky 😅), need moar cush #lasportivaprodigiomax" },
+    { "id": 20880190433, "name": "Sierra Helada x 2", "sport_type": "TrailRun", "start_date_local": "2026-11-06T09:02:15", "distance_m": 7990, "moving_time_s": 5443, "elapsed_time_s": 6198, "elevation_gain_m": 741, "description": "New shoe test drive, Prodigio Max. Loved 'em and not that firm for me, contrary to what a lot of people find. Bit less grippy on rock than the Tomir 2 though so weather might determine the shoe choice. Definitely preferred these to the Trabuco Max 5 which are now getting Vint'd. Mountains of Puig Campana & Aitana in the background.\n\n⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com" },
+    { "id": 20882158968, "name": "Lunch Walk", "sport_type": "Walk", "start_date_local": "2026-11-06T11:58:49", "distance_m": 3245, "moving_time_s": 2359, "elapsed_time_s": 6899, "elevation_gain_m": 50, "description": "Gestoría stuff, checking out a new bike shop in Albir and tostada con tomate time 👌" }
+  ]
+}
