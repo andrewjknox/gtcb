@@ -1,0 +1,74 @@
+{
+  "iso_week": "2026-W46",
+  "training_week": 23,
+  "phase": "Race",
+  "generated_at": "2026-11-09T13:17:25Z",
+  "window": {
+    "start": "2026-11-09T00:00:00",
+    "end": "2026-11-15T23:59:59",
+    "tz": "Europe/London"
+  },
+  "days_elapsed": 1,
+  "vert": {
+    "actual_m": 13,
+    "target_m": 500,
+    "prorated_target_m": 71,
+    "pct_of_target": 3,
+    "pct_of_prorated": 18
+  },
+  "time_on_feet": {
+    "actual_s": 1759
+  },
+  "distance": {
+    "actual_m": 5063
+  },
+  "sessions": {
+    "count": 1,
+    "on_foot_count": 1
+  },
+  "daily": [
+    {
+      "date": "2026-11-09",
+      "vert_m": 13,
+      "time_s": 1759,
+      "distance_m": 5063
+    },
+    {
+      "date": "2026-11-10",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-11-11",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-11-12",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-11-13",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-11-14",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    },
+    {
+      "date": "2026-11-15",
+      "vert_m": 0,
+      "time_s": 0,
+      "distance_m": 0
+    }
+  ],
+  "flags": []
+}
