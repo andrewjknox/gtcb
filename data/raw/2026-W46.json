@@ -2,8 +2,13 @@
   "iso_week": "2026-W46",
   "training_week": 23,
   "window": { "start": "2026-11-09T00:00:00", "end": "2026-11-15T23:59:59", "tz": "Europe/London" },
-  "fetched_at": "2026-11-09T13:16:42Z",
+  "fetched_at": "2026-11-11T19:21:41Z",
   "activities": [
-    { "id": 20917043223, "name": "Morning Run ☕", "sport_type": "Run", "start_date_local": "2026-11-09T08:26:43", "distance_m": 5063, "moving_time_s": 1759, "elapsed_time_s": 1759, "elevation_gain_m": 13, "description": null }
+    { "id": 20917043223, "name": "Morning Run ☕", "sport_type": "Run", "start_date_local": "2026-11-09T08:26:43", "distance_m": 5063, "moving_time_s": 1759, "elapsed_time_s": 1759, "elevation_gain_m": 13, "description": null },
+    { "id": 20922856997, "name": "Afternoon Walk", "sport_type": "Walk", "start_date_local": "2026-11-09T17:44:39", "distance_m": 4043, "moving_time_s": 2742, "elapsed_time_s": 3333, "elevation_gain_m": 57, "description": null },
+    { "id": 20929682606, "name": "Morning Hike", "sport_type": "Hike", "start_date_local": "2026-11-10T07:39:58", "distance_m": 4337, "moving_time_s": 3928, "elapsed_time_s": 4160, "elevation_gain_m": 378, "description": "⛰️ Alt del Governador (1,427 ft) | 🌐 summitbag.com" },
+    { "id": 20930078831, "name": "Morning Walk ☕🥖", "sport_type": "Walk", "start_date_local": "2026-11-10T09:14:04", "distance_m": 1933, "moving_time_s": 1335, "elapsed_time_s": 1662, "elevation_gain_m": 38, "description": null },
+    { "id": 20937537625, "name": "Evening Weight Training", "sport_type": "WeightTraining", "start_date_local": "2026-11-10T19:41:03", "distance_m": 0, "moving_time_s": 3052, "elapsed_time_s": 3052, "elevation_gain_m": 0, "description": null },
+    { "id": 20943211415, "name": "Morning Walk ☕🥖", "sport_type": "Walk", "start_date_local": "2026-11-11T08:44:25", "distance_m": 2211, "moving_time_s": 1514, "elapsed_time_s": 1970, "elevation_gain_m": 45, "description": null }
   ]
 }
