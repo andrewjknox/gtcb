@@ -109,10 +109,16 @@
   }
 
   /* ---------- pace / cut-off planner model ---------- */
-  /* Cumulative Naismith/Langmuir "effort" (km-equivalents) along the track,
-     then anchored through the official hard cut-offs so a 24 h finish
-     reproduces the organiser's schedule exactly; any other finish time just
-     scales the same normalised curve. */
+  /* Target-mode shape: when the pace model is available, the slider's finish
+     time is distributed along the PREDICTED curve (fraction of predicted
+     time at each km, scaled linearly to the chosen finish) — so PREDICTED and
+     a manual target at the same finish give identical splits. The night
+     multiplier was resolved for the predicted run's clock times; other
+     finish times reuse that shape rather than re-solving darkness (close
+     enough over ±a few hours). Fallback when no pace model is loaded:
+     cumulative Naismith/Langmuir "effort" (km-equivalents) anchored through
+     the official hard cut-offs, so a 24 h finish reproduces the organiser's
+     schedule and any other finish scales that normalised curve. */
 
   var chartAPI = null;    // { setYou, refreshLabels } — rebound on every renderChart
 
@@ -194,7 +200,7 @@
   /* normalised effort-fraction at a km: piecewise-linear rescale of the raw
      effort curve so each hard-control km lands exactly on its official frac */
   function fracAtKm(km) {
-    if (predOn()) return predMinAtKm(km) / (PRED.finH * 60);
+    if (PRED) return predMinAtKm(km) / (PRED.finH * 60);
     var re = effortAtKm(km);
     if (re <= anchors[0].rawEff) return anchors[0].frac;
     for (var i = 1; i < anchors.length; i++) {
@@ -208,7 +214,7 @@
   /* invert: km for a normalised effort fraction (drives the "you are here" mark) */
   function kmAtFrac(f) {
     f = Math.max(0, Math.min(1, f));
-    if (predOn()) return predKmAtMin(f * PRED.finH * 60);
+    if (PRED) return predKmAtMin(f * PRED.finH * 60);
     var i = 1;
     while (i < anchors.length && f > anchors[i].frac) i++;
     if (i >= anchors.length) return maxKm;
@@ -372,7 +378,7 @@
         ", +" +
         Math.round((model.night.mult - 1) * 100) + "% in darkness, × " +
         Math.round(speedFactor * 100) + "% readiness — recent training vs the build into that 46K (" + attLabel + "). " +
-        "Arrivals are absolute — the target slider is bypassed while this is on.";
+        "Arrivals are absolute — the target slider is bypassed while this is on; with it off, the slider rescales this same pacing shape to the chosen finish.";
     }
   })();
 
