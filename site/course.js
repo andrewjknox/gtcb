@@ -260,7 +260,7 @@
   /* ---------- predicted mode — 46K pace-vs-grade model ---------- */
   /* data.js carries paceModel: a moving-speed-by-grade curve fitted from the
      Costa Blanca Trails 46K (Nov 2022, same mountains) plus its knobs — aid
-     stoppage, flat ultra fade, night slowdown, and a readiness mapping fed by
+     stoppage, ultra fade (ramped along the course), night slowdown, and a readiness mapping fed by
      recent training weeks. Walking the curve over the track gives an absolute
      per-station arrival prediction, unlike the cut-off-anchored effort curve
      above, which distributes a chosen finish time. When the PREDICTED toggle
@@ -338,7 +338,12 @@
       if (dm > 0) {
         var g = ((track[k][1] - track[k - 1][1]) * norm) / dm * 100;
         var dt = dm / (speedAt(g) * speedFactor) / 60;  // moving minutes
-        dt *= model.stop_ratio * model.fade;            // aid stops + ultra fade
+        /* ultra fade: flat, or (fade_ramp "linear") ramped from 1.0 at the
+           start to 2*fade-1 at the finish so its mean over the course = fade */
+        var fadeNow = model.fade_ramp === "linear"
+          ? 1 + 2 * (model.fade - 1) * (track[k][0] / maxKm)
+          : model.fade;
+        dt *= model.stop_ratio * fadeNow;               // aid stops + ultra fade
         var clock = (START_MIN + tMin) % 1440;
         if (clock >= model.night.sunset_min || clock < model.night.sunrise_min) dt *= model.night.mult;
         tMin += dt;
@@ -362,7 +367,9 @@
     if (predNote) {
       predNote.textContent = "PREDICTED " + fmtDur(PRED.finH) + " — pace-vs-grade from the CB Trails 46K (Nov 2022, " +
         "same mountains) walked over the 102K, with the 46K's aid-stop ratio, +" +
-        Math.round((model.fade - 1) * 100) + "% ultra fade for double the equivalent distance, +" +
+        Math.round((model.fade - 1) * 100) + "% ultra fade for double the equivalent distance" +
+        (model.fade_ramp === "linear" ? " (ramped: 0% at the start to +" + Math.round((model.fade - 1) * 200) + "% by the finish)" : "") +
+        ", +" +
         Math.round((model.night.mult - 1) * 100) + "% in darkness, × " +
         Math.round(speedFactor * 100) + "% readiness — recent training vs the build into that 46K (" + attLabel + "). " +
         "Arrivals are absolute — the target slider is bypassed while this is on.";

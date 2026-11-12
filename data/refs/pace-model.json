@@ -75,7 +75,17 @@
     }
   ],
   "stop_ratio": 1.1179,
-  "fade": 1.06,
+  "fade": 1.12,
+  "fade_ramp": "linear",
+  "fade_basis": {
+    "k": 1.15,
+    "eq_km": {
+      "race": 164.5,
+      "ref": 79.2,
+      "ratio": 2.077
+    },
+    "reason": "2026-11-12 block review: k 1.08 -> 1.15 and ramped. k=1.08 is the owner's own 2022 road exponent (10K->HM->M), valid to ~4 h; the 102K is ~21-23 h, overnight from a 23:00 start, >2x the longest effort ever done (46K 9.1 h; W41 dress rehearsal 8.9 h), with a descent-watch right quad over 6,280 m D-. Ultra exponents run ~1.1-1.2; 1.15 is the middle. Fitness (readiness, capped +5%) is unchanged: block vert ~49.5 km at 102% of plan and the 2026-09-19 Faldes del Puig Campana night race (15.4 km / 838 m, 2:00) both support >=2022 climbing fitness. Ramp: a flat fade inflated early splits and showed a phantom Benimantell cut-off miss."
+  },
   "night": {
     "mult": 1.05,
     "sunrise_min": 465,
