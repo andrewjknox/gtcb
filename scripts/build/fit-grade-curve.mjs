@@ -9,9 +9,15 @@
 //                        walking the 46K's own samples reproduces its actual
 //                        moving time exactly
 //   stop_ratio           elapsed/moving from the 46K — aid stops, faff
-//   fade                 flat ultra-fade multiplier: Riegel k=1.08 over the
-//                        equivalent-distance ratio (102K ~164 eq-km vs 46K
-//                        ~79 eq-km): 2.08^0.08 ≈ 1.06
+//   fade                 mean ultra-fade multiplier: Riegel-style
+//                        eq_ratio^(k-1) over the equivalent-distance ratio
+//                        (km + D+/100: 102K ~164.5 eq-km vs 46K ~79.2 eq-km,
+//                        ratio ~2.08). k=1.15 (was 1.08, i.e. 1.06) — see
+//                        fade_basis.reason. With fade_ramp "linear" the
+//                        site ramps the multiplier along the course from 1.0
+//                        at the start to 2*fade-1 at the finish (mean = fade)
+//                        instead of applying it flat, so fresh-legged early
+//                        splits aren't inflated and late splits aren't flattered.
 //   night                slowdown while the race clock is in darkness
 //                        (mid-Nov Alicante: sunrise ~07:45, sunset ~17:45)
 //   readiness            maps recent training vert attainment to a speed
@@ -164,6 +170,14 @@ if (preblock) {
   };
 }
 
+// ---- ultra fade: 46K -> 102K scaling (re-assessed 2026-11-12, race eve) ----
+const RACE_KM = 101.7, RACE_GAIN_M = 6280;  // official GTCB 102K figures
+const FADE_K = 1.15;
+const eqRace = RACE_KM + RACE_GAIN_M / 100;
+const eqRef = ref.source.distance_m / 1000 + ref.source.elevation_gain_m / 100;
+const eqRatio = eqRace / eqRef;
+const fade = Math.round(Math.pow(eqRatio, FADE_K - 1) * 100) / 100;
+
 const model = {
   generated_by: "scripts/build/fit-grade-curve.mjs",
   source: {
@@ -175,7 +189,20 @@ const model = {
   },
   curve,
   stop_ratio: +(ref.source.elapsed_time_s / ref.source.moving_time_s).toFixed(4),
-  fade: 1.06,
+  fade,
+  fade_ramp: "linear",
+  fade_basis: {
+    k: FADE_K,
+    eq_km: { race: +eqRace.toFixed(1), ref: +eqRef.toFixed(1), ratio: +eqRatio.toFixed(3) },
+    reason:
+      "2026-11-12 block review: k 1.08 -> 1.15 and ramped. k=1.08 is the owner's own 2022 road exponent " +
+      "(10K->HM->M), valid to ~4 h; the 102K is ~21-23 h, overnight from a 23:00 start, >2x the longest effort " +
+      "ever done (46K 9.1 h; W41 dress rehearsal 8.9 h), with a descent-watch right quad over 6,280 m D-. " +
+      "Ultra exponents run ~1.1-1.2; 1.15 is the middle. Fitness (readiness, capped +5%) is unchanged: " +
+      "block vert ~49.5 km at 102% of plan and the 2026-09-19 Faldes del Puig Campana night race " +
+      "(15.4 km / 838 m, 2:00) both support >=2022 climbing fitness. Ramp: a flat fade inflated early " +
+      "splits and showed a phantom Benimantell cut-off miss.",
+  },
   night: { mult: 1.05, sunrise_min: 465, sunset_min: 1065 },
   readiness,
 };
